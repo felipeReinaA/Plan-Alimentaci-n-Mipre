@@ -1,1 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Plan — Mipre</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #FBF8FF;
+  --bg2:       #F4EEFC;
+  --card:      #FFFFFF;
+  --card2:     #FAF6FF;
+  --border:    #E4D9F5;
+  --border2:   #EEE6FA;
+  --gold:      #7B57B5;
+  --gold-mid:  #B497E0;
+  --gold-light:#E3D6F7;
+  --gold-pale: #F6F1FD;
+  --gold-glow: rgba(180,151,224,0.15);
+  --sage:      #4F9A86;
+  --sage-light:#D3EFE6;
+  --sage-pale: #F0FAF6;
+  --rose:      #D56C9B;
+  --rose-light:#FBE3EE;
+  --sky:       #6F8FD1;
+  --sky-light: #DCE6F8;
+  --peach:     #C9913A;
+  --peach-light:#FBEBCB;
+  --text:      #2A2238;
+  --text2:     #5E5276;
+  --text3:     #7F7499;
+}
 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND BLOBS ── */
+.blob {
+  position: fixed; border-radius: 50%; filter: blur(90px);
+  opacity: 0.35; pointer-events: none; z-index: 0;
+}
+.blob-1 { width: 400px; height: 400px; background: #D9C6F5; top: -100px; left: -80px; }
+.blob-2 { width: 300px; height: 300px; background: #F6C9DE; bottom: 80px; right: -60px; }
+.blob-3 { width: 200px; height: 200px; background: #C2EBDD; top: 45%; left: 55%; }
+
+/* ── WRAP ── */
+.wrap {
+  position: relative; z-index: 1;
+  max-width: 480px; margin: 0 auto;
+  padding: 0 18px 60px;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+}
+
+/* ── TOP BAR ── */
+.top-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px 0 0; gap: 8px; flex-wrap: wrap;
+}
+.logo-pill {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--gold-pale); border: 1.5px solid var(--border);
+  border-radius: 99px; padding: 6px 14px 6px 10px;
+}
+.logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--gold-mid); box-shadow: 0 0 8px var(--gold-light); flex-shrink: 0; }
+.logo-text { font-size: 12px; font-weight: 800; color: var(--gold); letter-spacing: 0.04em; white-space: nowrap; }
+.top-date { font-size: 12px; color: var(--text3); font-weight: 600; }
+
+/* ── HERO ── */
+.hero { padding: 40px 0 28px; text-align: center; }
+.hero-emoji {
+  font-size: 62px; display: block; margin-bottom: 18px;
+  filter: drop-shadow(0 4px 16px rgba(180,151,224,0.25));
+  animation: pulse 3s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.06);} }
+.hero-greeting {
+  font-size: 12px; font-weight: 800; color: var(--gold);
+  text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px;
+}
+.hero-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 36px; font-weight: 400; line-height: 1.1;
+  color: var(--text); margin-bottom: 12px;
+}
+.hero-name span { color: var(--gold); }
+.hero-sub { font-size: 14px; color: var(--text2); line-height: 1.6; max-width: 280px; margin: 0 auto; }
+
+/* ── QUOTE STRIP ── */
+.quote-strip {
+  background: linear-gradient(135deg, var(--gold-pale), #FDFBFF);
+  border: 1.5px solid var(--border);
+  border-radius: 18px; padding: 16px 18px; margin-bottom: 28px;
+  display: flex; align-items: flex-start; gap: 12px;
+  box-shadow: 0 2px 12px rgba(123,87,181,0.08);
+}
+.quote-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+.quote-text { font-size: 14px; color: var(--gold); font-weight: 700; line-height: 1.5; font-style: italic; }
+.quote-author { font-size: 11px; color: var(--text3); margin-top: 5px; font-style: normal; font-weight: 600; }
+
+/* ── STATS ── */
+.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 28px; }
+.stat-box {
+  background: var(--card); border: 1.5px solid var(--border2);
+  border-radius: 16px; padding: 16px 10px; text-align: center;
+  box-shadow: 0 2px 8px rgba(123,87,181,0.06);
+}
+.stat-val { font-size: 24px; font-weight: 900; line-height: 1; }
+.stat-lbl { font-size: 10px; color: var(--text3); font-weight: 700; margin-top: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ── SECTION LABEL ── */
+.sec-label {
+  font-size: 10px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--text3);
+  display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+}
+.sec-label::before, .sec-label::after { content:''; flex:1; height:1px; background: var(--border); }
+
+/* ── NAV CARDS ── */
+.cards { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+.nav-card {
+  background: var(--card);
+  border: 1.5px solid var(--border2);
+  border-radius: 20px; overflow: hidden;
+  text-decoration: none; color: inherit;
+  display: block;
+  box-shadow: 0 2px 12px rgba(123,87,181,0.07);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+.nav-card:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(123,87,181,0.15); }
+.nav-card:active { transform: scale(0.98); }
+.card-glow { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 20px 20px 0 0; }
+.card-inner { display: flex; align-items: center; gap: 14px; padding: 18px 16px; }
+.card-icon-wrap {
+  width: 56px; height: 56px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; flex-shrink: 0;
+}
+.card-body { flex: 1; min-width: 0; }
+.card-num { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
+.card-title { font-size: 16px; font-weight: 900; letter-spacing: -0.2px; margin-bottom: 5px; color: var(--text); }
+.card-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.tag { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 99px; }
+.card-arrow {
+  width: 34px; height: 34px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0; transition: transform 0.2s;
+}
+.nav-card:hover .card-arrow { transform: translateX(3px); }
+
+/* ── QUOTES CAROUSEL ── */
+.quotes-section { margin-bottom: 28px; }
+.quotes-scroll {
+  display: flex; gap: 12px;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; padding: 4px 2px 14px;
+  -webkit-overflow-scrolling: touch;
+}
+.quotes-scroll::-webkit-scrollbar { display: none; }
+.q-card {
+  flex: 0 0 78vw; max-width: 290px;
+  scroll-snap-align: start;
+  background: var(--card);
+  border: 1.5px solid var(--border2);
+  border-radius: 18px; padding: 18px 16px;
+  display: flex; flex-direction: column; gap: 10px;
+  position: relative; overflow: hidden;
+  box-shadow: 0 2px 10px rgba(123,87,181,0.07);
+}
+.q-top { position:absolute; top:0; left:0; right:0; height:3px; border-radius:18px 18px 0 0; }
+.q-emoji { font-size: 26px; }
+.q-text { font-size: 13px; color: var(--text2); line-height: 1.6; font-style: italic; flex: 1; }
+.q-dots { display: flex; gap: 5px; justify-content: center; margin-top: 6px; }
+.q-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
+.q-dot.active { background: var(--gold-mid); width: 16px; border-radius: 99px; }
+
+/* ── PROGRESS BADGE ── */
+.progress-badge {
+  background: var(--card); border: 1.5px solid var(--border2);
+  border-radius: 16px; padding: 14px 16px; margin-bottom: 28px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 2px 8px rgba(123,87,181,0.06);
+}
+.pb-icon { font-size: 28px; flex-shrink: 0; }
+.pb-text { flex: 1; }
+.pb-title { font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+.pb-sub { font-size: 11.5px; color: var(--text3); line-height: 1.4; }
+.pb-bar-wrap { height: 6px; background: var(--border); border-radius: 99px; margin-top: 8px; overflow: hidden; }
+.pb-bar { height: 100%; background: linear-gradient(90deg, var(--gold-mid), #C9B2F0); border-radius: 99px; width: 4%; }
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center; padding: 16px 0;
+  font-size: 11px; color: var(--text3); line-height: 1.7;
+  border-top: 1px solid var(--border); margin-top: 8px;
+}
+.footer strong { color: var(--gold); }
+
+/* ── RIPPLE ── */
+@keyframes ripple { 0%{transform:scale(0);opacity:0.4;} 100%{transform:scale(4);opacity:0;} }
+.nav-card .ripple-el {
+  position: absolute; border-radius: 50%;
+  width: 60px; height: 60px; margin-left: -30px; margin-top: -30px;
+  pointer-events: none; animation: ripple 0.6s ease-out forwards;
+}
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<div class="wrap">
+
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div class="logo-pill">
+      <div class="logo-dot"></div>
+      <span class="logo-text">Camilo Roa · Health & Nutrition</span>
+    </div>
+    <div class="top-date" id="topDate"></div>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <span class="hero-emoji">🦋</span>
+    <div class="hero-greeting">Bienvenida a tu proceso</div>
+    <div class="hero-name">Hola, <span>Mipre</span> 👋</div>
+    <div class="hero-sub">Tu plan personalizado está listo. Todo en un solo lugar, sin excusas.</div>
+  </div>
+
+  <!-- Quote strip rotativa -->
+  <div class="quote-strip">
+    <span class="quote-icon">💜</span>
+    <div>
+      <div class="quote-text" id="quoteText">"El único mal entrenamiento es el que no hiciste."</div>
+      <div class="quote-author" id="quoteAuthor">— Recuerda: 80% alimentación · 15% entrenamiento · 5% suplementación</div>
+    </div>
+  </div>
+
+  <!-- Progress badge -->
+  <div class="progress-badge">
+    <div class="pb-icon">🚀</div>
+    <div class="pb-text">
+      <div class="pb-title">Tu punto de partida — 05 Oct 2026</div>
+      <div class="pb-sub">61.4 kg · IMC 23.6 · Abdomen 81 cm · Meta: bajar grasa y tonificar</div>
+      <div class="pb-bar-wrap"><div class="pb-bar"></div></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-val" style="color:var(--sage)">5</div>
+      <div class="stat-lbl">Días entreno</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" style="color:var(--gold)">6</div>
+      <div class="stat-lbl">Comidas al día</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" style="color:var(--sky)">2.5L</div>
+      <div class="stat-lbl">Agua diaria</div>
+    </div>
+  </div>
+
+  <!-- Nav cards -->
+  <div class="sec-label">Tu plan completo</div>
+  <div class="cards">
+
+    <!-- 1. Lista mercado -->
+    <a href="index_lista_mercado_mipre.html" data-rc="rgba(79,154,134,0.15)" class="nav-card" onclick="addRipple(event,this)">
+      <div class="card-glow" style="background:linear-gradient(90deg,#4F9A86,#8FD3BC)"></div>
+      <div class="card-inner">
+        <div class="card-icon-wrap" style="background:#E6F6F0;border:1.5px solid #BFE5D6">🛒</div>
+        <div class="card-body">
+          <div class="card-num" style="color:var(--sage)">Módulo 01</div>
+          <div class="card-title">Lista de Mercado</div>
+          <div class="card-desc">Todo lo que necesitas comprar, organizado por categorías. ¡Lleva el celular al súper!</div>
+          <div class="card-tags">
+            <span class="tag" style="background:#E6F6F0;color:var(--sage)">🥦 Verduras</span>
+            <span class="tag" style="background:#E6F6F0;color:var(--sage)">🥩 Carnes</span>
+            <span class="tag" style="background:#E6F6F0;color:var(--sage)">🛒 Despensa</span>
+            <span class="tag" style="background:#E6F6F0;color:var(--sage)">💊 Suplementos</span>
+          </div>
+        </div>
+        <div class="card-arrow" style="background:#E6F6F0;color:var(--sage)">→</div>
+      </div>
+    </a>
+
+    <!-- 2. Plan alimentación -->
+    <a href="index_plan_alimentacion_mipre.html" data-rc="rgba(123,87,181,0.15)" class="nav-card" onclick="addRipple(event,this)">
+      <div class="card-glow" style="background:linear-gradient(90deg,#7B57B5,#C9B2F0)"></div>
+      <div class="card-inner">
+        <div class="card-icon-wrap" style="background:var(--gold-pale);border:1.5px solid var(--border)">🥗</div>
+        <div class="card-body">
+          <div class="card-num" style="color:var(--gold)">Módulo 02</div>
+          <div class="card-title">Plan de Alimentación</div>
+          <div class="card-desc">Menú día a día con porciones exactas: desayuno, media mañana, almuerzo, algo, comida y merienda.</div>
+          <div class="card-tags">
+            <span class="tag" style="background:var(--gold-pale);color:var(--gold)">📅 7 días</span>
+            <span class="tag" style="background:var(--gold-pale);color:var(--gold)">🍽️ 6 comidas</span>
+            <span class="tag" style="background:var(--gold-pale);color:var(--gold)">⚖️ Porciones</span>
+          </div>
+        </div>
+        <div class="card-arrow" style="background:var(--gold-pale);color:var(--gold)">→</div>
+      </div>
+    </a>
+
+    <!-- 3. Rutinas -->
+    <a href="index_rutinas_mipre.html" data-rc="rgba(213,108,155,0.15)" class="nav-card" onclick="addRipple(event,this)">
+      <div class="card-glow" style="background:linear-gradient(90deg,#D56C9B,#EFA3C2)"></div>
+      <div class="card-inner">
+        <div class="card-icon-wrap" style="background:#FBEAF2;border:1.5px solid #F2C6DA">🔥</div>
+        <div class="card-body">
+          <div class="card-num" style="color:var(--rose)">Módulo 03</div>
+          <div class="card-title">Rutina de Entrenamiento</div>
+          <div class="card-desc">5 días de ejercicios con series de 12 repeticiones al fallo y progreso en tiempo real. ¡A sudar!</div>
+          <div class="card-tags">
+            <span class="tag" style="background:#FBEAF2;color:var(--rose)">🍑 Glúteo</span>
+            <span class="tag" style="background:#FBEAF2;color:var(--rose)">💪 Superior</span>
+            <span class="tag" style="background:#FBEAF2;color:var(--rose)">🦵 Pierna</span>
+            <span class="tag" style="background:#FBEAF2;color:var(--rose)">🏃 Cardio</span>
+          </div>
+        </div>
+        <div class="card-arrow" style="background:#FBEAF2;color:var(--rose)">→</div>
+      </div>
+    </a>
+
+    <!-- 4. Recetas -->
+    <a href="index_recetas_mipre.html" data-rc="rgba(201,145,58,0.15)" class="nav-card" onclick="addRipple(event,this)">
+      <div class="card-glow" style="background:linear-gradient(90deg,#C9913A,#EFC77F)"></div>
+      <div class="card-inner">
+        <div class="card-icon-wrap" style="background:#FFF6E3;border:1.5px solid #F3DFB0">🥒</div>
+        <div class="card-body">
+          <div class="card-num" style="color:var(--peach)">Módulo 04</div>
+          <div class="card-title">Recetas con Vegetales</div>
+          <div class="card-desc">Ideas para dar saciedad con los vegetales libres. Cómelos sin medida en tus comidas.</div>
+          <div class="card-tags">
+            <span class="tag" style="background:#FFF6E3;color:var(--peach)">🥤 Jugos verdes</span>
+            <span class="tag" style="background:#FFF6E3;color:var(--peach)">🍲 Cremas</span>
+            <span class="tag" style="background:#FFF6E3;color:var(--peach)">🍳 Salteados</span>
+            <span class="tag" style="background:#FFF6E3;color:var(--peach)">🥗 Ceviche</span>
+          </div>
+        </div>
+        <div class="card-arrow" style="background:#FFF6E3;color:var(--peach)">→</div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Quotes carrusel -->
+  <div class="quotes-section">
+    <div class="sec-label">Frases para hoy</div>
+    <div class="quotes-scroll" id="quotesScroll">
+
+      <div class="q-card">
+        <div class="q-top" style="background:linear-gradient(90deg,#7B57B5,#C9B2F0)"></div>
+        <span class="q-emoji">🌱</span>
+        <div class="q-text">"Cada comida a tiempo es una decisión a favor de tu cuerpo."</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-top" style="background:linear-gradient(90deg,#D56C9B,#EFA3C2)"></div>
+        <span class="q-emoji">💪</span>
+        <div class="q-text">"El tono se construye repetición a repetición. Hoy toca una más."</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-top" style="background:linear-gradient(90deg,#4F9A86,#8FD3BC)"></div>
+        <span class="q-emoji">🥗</span>
+        <div class="q-text">"Comer cada 3 a 4 horas es tu mejor aliado contra el antojo."</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-top" style="background:linear-gradient(90deg,#6F8FD1,#A5BDEB)"></div>
+        <span class="q-emoji">💧</span>
+        <div class="q-text">"Tus 2.5 litros de agua también son parte del entrenamiento."</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-top" style="background:linear-gradient(90deg,#D56C9B,#EFA3C2)"></div>
+        <span class="q-emoji">🍑</span>
+        <div class="q-text">"Piernas y glúteo se esculpen con constancia, no con prisa."</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-top" style="background:linear-gradient(90deg,#C9913A,#EFC77F)"></div>
+        <span class="q-emoji">📆</span>
+        <div class="q-text">"Las primeras dos semanas son las más retadoras. Después, tu cuerpo ya no te pide dulce."</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-top" style="background:linear-gradient(90deg,#7B57B5,#C9B2F0)"></div>
+        <span class="q-emoji">🌟</span>
+        <div class="q-text">"No necesitas ser perfecta: cumpliendo el 90% de tus comidas vas a ver resultados."</div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-top" style="background:linear-gradient(90deg,#4F9A86,#8FD3BC)"></div>
+        <span class="q-emoji">🏁</span>
+        <div class="q-text">"Empezar ya es ganar. Hoy es tu día 1."</div>
+      </div>
+
+    </div>
+    <div class="q-dots" id="qDots"></div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div style="margin-bottom:10px;">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:6px;">Programa nutricional</div>
+      <strong>C. Camilo Roa B.</strong> · Nutricionista Dietista<br>
+      Esp. Nutrición Deportiva · Sobrepeso & Obesidad<br>
+      📱 <strong>+57 304 471 3952</strong> · Medellín, Colombia
+    </div>
+    <div style="width:40px;height:1px;background:var(--border);margin:12px auto;"></div>
+    <div>
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:6px;">Diseño & desarrollo web</div>
+      <strong>Felipe R.</strong><br>
+      📱 <a href="tel:+573214575787" style="color:var(--gold);text-decoration:none;font-weight:700;">+57 321 457 5787</a>
+      &nbsp;·&nbsp;
+      <a href="https://wa.me/573214575787" style="color:var(--gold);text-decoration:none;font-weight:700;">💬 WhatsApp</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Fecha
+var days   = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+var months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+var now    = new Date();
+document.getElementById('topDate').textContent =
+  days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()];
+
+// Frase rotativa header
+var quotes = [
+  { text: '"Hoy empieza tu proceso. Un paso a la vez, una comida a la vez."',              author: '— Plan 05.10.26 · Camilo Roa' },
+  { text: '"La constancia le gana a la motivación todos los días."',                        author: '— 4 a 5 días de entrenamiento cada semana' },
+  { text: '"Tu cuerpo cambia con lo que haces la mayor parte del tiempo."',                 author: '— Cumple el 90% de los menús y los resultados llegarán' },
+  { text: '"Tomar agua, comer a tiempo y entrenar: lo simple también funciona."',           author: '— 80% alimentación · 15% entrenamiento · 5% suplementación' },
+  { text: '"Tu única competencia es la Mipre de ayer."',                                 author: '— Una comida trampa por semana está permitida, ¡sin dulce!' },
+  { text: '"Cuidar tu salud también se ve bien."',                                          author: '— Meta: bajar grasa, tonificar y cuidar tu corazón' },
+];
+var qi = Math.floor(Math.random() * quotes.length);
+document.getElementById('quoteText').textContent  = quotes[qi].text;
+document.getElementById('quoteAuthor').textContent = quotes[qi].author;
+
+// Carrusel de frases — dots
+(function () {
+  var scroll = document.getElementById('quotesScroll');
+  var dotsEl = document.getElementById('qDots');
+  if (!scroll || !dotsEl) return;
+  var cards  = scroll.querySelectorAll('.q-card');
+  cards.forEach(function (_, i) {
+    var d = document.createElement('div');
+    d.className = 'q-dot' + (i === 0 ? ' active' : '');
+    dotsEl.appendChild(d);
+  });
+  scroll.addEventListener('scroll', function () {
+    var cardW = scroll.querySelector('.q-card').offsetWidth + 12;
+    var idx   = Math.round(scroll.scrollLeft / cardW);
+    dotsEl.querySelectorAll('.q-dot').forEach(function (d, i) {
+      d.classList.toggle('active', i === idx);
+    });
+  }, { passive: true });
+})();
+
+// Ripple
+function addRipple(e, card) {
+  var rect  = card.getBoundingClientRect();
+  var el    = document.createElement('div');
+  el.className = 'ripple-el';
+  el.style.left = (e.clientX - rect.left) + 'px';
+  el.style.top  = (e.clientY - rect.top)  + 'px';
+  el.style.background = card.getAttribute('data-rc') || 'rgba(123,87,181,0.15)';
+  card.appendChild(el);
+  setTimeout(function () { el.remove(); }, 700);
+}
+</script>
+</body>
+</html>
