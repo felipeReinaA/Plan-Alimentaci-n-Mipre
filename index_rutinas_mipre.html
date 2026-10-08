@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rutina — Mipre</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+--bg: #0D0A14;
+--card: #17121F;
+--card2: #1F1830;
+--border: #2F2545;
+--purple: #B58CFF;
+--purple-dark: #5B3E96;
+--purple-glow: rgba(181,140,255,0.15);
+--pink: #D6006B;
+--pink-text: #FF5CAB;
+--amber: #FFB830;
+--amber-light: rgba(255,184,48,0.12);
+--sky: #8AB4FF;
+--text: #F4EEFB;
+--text2: #B3A6C9;
+--text3: #8576A3;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+/* ─── HEADER ─── */
+.header {
+background: linear-gradient(135deg, #24104A 0%, #0D0A14 100%);
+padding: 16px 16px 14px;
+border-bottom: 1px solid var(--border);
+position: sticky; top: 0; z-index: 200;
+}
+.header-row1 {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 10px;
+gap: 8px;
+}
+.header-top { display: flex; align-items: center; gap: 10px; }
+.header-icon {
+width: 38px; height: 38px; border-radius: 12px;
+background: var(--purple-glow); border: 1px solid var(--purple);
+display: flex; align-items: center; justify-content: center;
+font-size: 18px; flex-shrink: 0;
+}
+.header h1 { font-size: 16px; font-weight: 900; letter-spacing: -0.3px; line-height: 1.2; }
+.header p { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+/* ─── BACK BTN ─── */
+.btn-back {
+display: inline-flex; align-items: center; gap: 5px;
+color: var(--text2); text-decoration: none;
+font-size: 12px; font-weight: 700;
+padding: 5px 10px; border-radius: 8px;
+background: var(--card); border: 1px solid var(--border);
+transition: all 0.2s; white-space: nowrap; flex-shrink: 0;
+-webkit-tap-highlight-color: transparent;
+}
+.btn-back:hover { color: var(--text); border-color: #43365F; background: var(--card2); }
+
+/* ─── WEEK PILLS ─── */
+.week-pills { display: flex; gap: 6px; margin-top: 12px; }
+.week-pill {
+flex: 1; height: 4px; border-radius: 99px;
+background: var(--border); cursor: pointer; transition: background 0.3s;
+}
+.week-pill.active { background: var(--purple); box-shadow: 0 0 8px var(--purple); }
+
+/* ─── DAY NAV — GRID (all visible, no scroll) ─── */
+.day-nav {
+background: var(--card);
+border-bottom: 1px solid var(--border);
+position: sticky;
+top: 0; / JS sets this */
+z-index: 199;
+padding: 8px 10px 0;
+}
+.day-grid-nav {
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+gap: 4px;
+max-width: 600px;
+margin: 0 auto;
+}
+.day-btn {
+border: none; background: none; cursor: pointer;
+padding: 8px 4px 10px;
+display: flex; flex-direction: column; align-items: center; gap: 2px;
+color: var(--text3);
+border-bottom: 2px solid transparent;
+margin-bottom: -1px;
+transition: all 0.2s;
+border-radius: 8px 8px 0 0;
+font-family: 'Nunito', sans-serif;
+-webkit-tap-highlight-color: transparent;
+min-width: 0;
+}
+.day-btn .dlabel { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1; }
+.day-btn .dnum { font-size: 18px; font-weight: 900; line-height: 1; }
+.day-btn .dtype {
+font-size: 8.5px; font-weight: 700;
+padding: 2px 5px; border-radius: 99px;
+margin-top: 2px; white-space: nowrap;
+overflow: hidden; text-overflow: ellipsis;
+max-width: 100%;
+}
+.day-btn.active { color: var(--text); border-bottom-color: var(--purple); background: rgba(181,140,255,0.05); }
+.day-btn:hover:not(.active) { color: var(--text2); }
+
+/* ─── MAIN ─── */
+.main { padding: 14px 13px 100px; max-width: 600px; margin: 0 auto; }
+.day-panel { display: none; animation: fadeUp 0.22s ease; }
+.day-panel.active { display: block; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+/* ─── HERO BADGE ─── */
+.day-hero {
+border-radius: 16px; padding: 14px 16px; margin-bottom: 12px;
+display: flex; align-items: center; gap: 12px; border: 1px solid;
+}
+.day-hero-icon { font-size: 32px; flex-shrink: 0; }
+.day-hero-title { font-size: 16px; font-weight: 900; letter-spacing: -0.2px; }
+.day-hero-sub { font-size: 11px; margin-top: 4px; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.badge { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 99px; }
+
+/* ─── RULE BOX ─── */
+.rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.rule-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
+.rule-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text3); margin-bottom: 3px; }
+.rule-val { font-size: 13px; font-weight: 700; color: var(--text); }
+.rule-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+/* ─── SECTION LABEL ─── */
+.sec-label {
+font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em;
+color: var(--text3); padding: 4px 2px 8px; display: flex; align-items: center; gap: 6px;
+}
+.sec-label::after { content:''; flex:1; height:1px; background: var(--border); }
+
+/* ─── EXERCISE CARD ─── */
+.ex-card {
+background: var(--card); border: 1px solid var(--border);
+border-radius: 14px; margin-bottom: 7px; overflow: hidden;
+transition: border-color 0.2s, box-shadow 0.2s;
+cursor: pointer;
+-webkit-tap-highlight-color: transparent;
+}
+.ex-card:hover { border-color: #43365F; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+.ex-card.done { border-color: var(--purple-dark); background: #1B1430; }
+
+.ex-header { display: flex; align-items: center; gap: 9px; padding: 11px 12px; user-select: none; }
+.ex-num { width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+.ex-info { flex: 1; min-width: 0; }
+.ex-name { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.3; }
+.ex-card.done .ex-name { color: var(--purple); }
+.ex-detail { font-size: 11px; color: var(--text2); margin-top: 2px; font-weight: 600; line-height: 1.3; }
+.ex-right { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+
+.ex-check {
+width: 24px; height: 24px; border-radius: 7px; border: 2px solid var(--border);
+display: flex; align-items: center; justify-content: center;
+transition: all 0.2s; background: var(--card2); flex-shrink: 0;
+}
+.ex-card.done .ex-check { background: var(--purple); border-color: var(--purple); }
+.ex-check svg { display: none; }
+.ex-card.done .ex-check svg { display: block; }
+
+.ex-sets { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; max-width: 80px; justify-content: flex-end; }
+.set-dot {
+width: 14px; height: 14px; border-radius: 50%;
+background: var(--border); cursor: pointer;
+transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+border: 2px solid #43365F; flex-shrink: 0;
+}
+.set-dot:active { transform: scale(0.82); }
+.set-dot.lit { background: var(--purple); border-color: var(--purple); box-shadow: 0 0 5px rgba(181,140,255,0.5); }
+
+.ex-tip { background: rgba(255,184,48,0.06); border-top: 1px solid var(--border); padding: 7px 12px; font-size: 11.5px; color: var(--amber); display: flex; gap: 6px; line-height: 1.4; }
+
+/* ─── TRISERIE ─── */
+.tri-card { background: var(--card2); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 7px; overflow: hidden; }
+.tri-header { display: flex; align-items: center; gap: 9px; padding: 10px 12px; cursor: pointer; border-bottom: 1px solid transparent; transition: border-color 0.2s; -webkit-tap-highlight-color: transparent; }
+.tri-card.open .tri-header { border-bottom-color: var(--border); }
+.tri-badge { font-size: 9.5px; font-weight: 800; padding: 3px 8px; border-radius: 99px; flex-shrink: 0; }
+.tri-name { font-size: 13px; font-weight: 700; flex: 1; }
+.tri-arrow { color: var(--text3); font-size: 13px; transition: transform 0.25s; }
+.tri-card.open .tri-arrow { transform: rotate(180deg); }
+.tri-body { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.tri-card.open .tri-body { max-height: 300px; }
+.tri-ex { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px dashed var(--border); }
+.tri-ex:last-child { border-bottom: none; }
+.tri-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.tri-text { font-size: 12.5px; color: var(--text2); flex: 1; }
+.tri-reps { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 99px; background: var(--border); color: var(--text2); white-space: nowrap; }
+.tri-sets { display: flex; gap: 4px; align-items: center; margin-left: auto; padding-right: 4px; }
+.tri-check {
+width: 24px; height: 24px; border-radius: 7px; border: 2px solid var(--border);
+display: flex; align-items: center; justify-content: center;
+background: var(--card2); flex-shrink: 0; margin-left: 6px;
+transition: all 0.2s;
+}
+.tri-card.done-tri .tri-check { background: var(--purple); border-color: var(--purple); }
+.tri-check svg { display: none; }
+.tri-card.done-tri .tri-check svg { display: block; }
+.ab-check {
+width: 24px; height: 24px; border-radius: 7px; border: 2px solid rgba(214,0,107,0.4);
+display: flex; align-items: center; justify-content: center;
+background: rgba(214,0,107,0.05); flex-shrink: 0; margin-left: 6px;
+transition: all 0.2s;
+}
+.ab-card.done-ab .ab-check { background: var(--purple); border-color: var(--purple); }
+.ab-check svg { display: none; }
+.ab-card.done-ab .ab-check svg { display: block; }
+.tri-card.done-tri { border-color: var(--purple-dark); background: #1B1430; }
+.tri-card.done-tri .tri-name { color: var(--purple); }
+.tri-card.done-tri .tri-badge { background: rgba(181,140,255,0.15); color: var(--purple); }
+.ab-sets { display: flex; gap: 4px; align-items: center; margin-left: auto; }
+.ab-card.done-ab .ab-title { color: var(--purple); }
+.ab-card.done-ab { border-color: rgba(214,0,107,0.45); background: rgba(181,140,255,0.04); }
+.tri-card.done-tri { border-color: var(--purple-dark); background: #1B1430; }
+.ab-card.done-ab .ab-title { color: var(--purple); }
+
+/* ─── CARDIO ─── */
+.cardio-card {
+background: linear-gradient(135deg, rgba(138,180,255,0.08), rgba(138,180,255,0.03));
+border: 1px solid rgba(138,180,255,0.25); border-radius: 14px;
+padding: 12px 14px; margin-bottom: 7px;
+display: flex; align-items: center; gap: 11px;
+}
+.cardio-icon { font-size: 26px; flex-shrink: 0; }
+.cardio-title { font-size: 14px; font-weight: 800; color: var(--sky); }
+.cardio-detail { font-size: 11.5px; color: var(--text2); margin-top: 3px; line-height: 1.4; }
+.cardio-timer { margin-left: auto; text-align: center; flex-shrink: 0; }
+.cardio-min { font-size: 24px; font-weight: 900; color: var(--sky); line-height: 1; }
+.cardio-lbl { font-size: 9px; color: var(--text3); font-weight: 700; text-transform: uppercase; }
+
+/* ─── ABDOMEN ─── */
+.ab-card {
+background: linear-gradient(135deg, rgba(214,0,107,0.08), rgba(214,0,107,0.03));
+border: 1px solid rgba(214,0,107,0.25); border-radius: 14px; margin-bottom: 7px; overflow: hidden;
+}
+.ab-header { display: flex; align-items: center; gap: 9px; padding: 11px 13px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.ab-title { font-size: 14px; font-weight: 800; color: var(--pink-text); flex: 1; }
+.ab-arrow { color: var(--text3); font-size: 13px; transition: transform 0.25s; }
+.ab-card.open .ab-arrow { transform: rotate(180deg); }
+.ab-body { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+.ab-card.open .ab-body { max-height: 400px; }
+.ab-ex { display: flex; align-items: center; gap: 8px; padding: 7px 13px; border-top: 1px solid rgba(214,0,107,0.1); font-size: 12.5px; color: var(--text2); }
+.ab-ex span:first-child { font-size: 15px; flex-shrink: 0; }
+
+/* ─── PROGRESS BAR ─── */
+.prog-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 13px; padding: 12px 13px; margin-bottom: 12px; }
+.prog-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+.prog-title { font-size: 12.5px; font-weight: 700; }
+.prog-pct { font-size: 13px; font-weight: 800; color: var(--purple); }
+.prog-bar { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.prog-fill { height: 100%; background: linear-gradient(90deg, var(--purple), #D3B8FF); border-radius: 99px; transition: width 0.4s ease; width: 0%; }
+
+/* ─── FAB ─── */
+.fab {
+position: fixed; bottom: 22px; right: 14px; z-index: 300;
+background: linear-gradient(135deg, #D6006B, #7B3FD1);
+color: white; border: none; border-radius: 99px;
+padding: 12px 18px; font-family: 'Nunito', sans-serif;
+font-size: 13px; font-weight: 800; cursor: pointer;
+box-shadow: 0 6px 24px rgba(214,0,107,0.35);
+display: flex; align-items: center; gap: 7px;
+transition: transform 0.15s, box-shadow 0.2s;
+-webkit-tap-highlight-color: transparent;
+}
+.fab:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(214,0,107,0.45); }
+.fab:active { transform: scale(0.97); }
+
+/* ─── RESPONSIVE: TABLET (≥560px) ─── */
+@media (min-width: 560px) {
+.header { padding: 18px 22px 16px; }
+.header h1 { font-size: 18px; }
+.header-icon { width: 42px; height: 42px; font-size: 20px; }
+.day-nav { padding: 10px 16px 0; }
+.day-grid-nav { gap: 6px; }
+.day-btn { padding: 10px 6px 12px; }
+.day-btn .dlabel { font-size: 10px; }
+.day-btn .dnum { font-size: 20px; }
+.day-btn .dtype { font-size: 9.5px; }
+.main { padding: 16px 20px 100px; }
+.ex-name { font-size: 14px; }
+.ex-detail { font-size: 12px; }
+.set-dot { width: 16px; height: 16px; }
+.ex-sets { max-width: 100px; }
+}
+
+/* ─── RESPONSIVE: DESKTOP (≥768px) ─── */
+@media (min-width: 768px) {
+.header { padding: 20px 28px 18px; }
+.header h1 { font-size: 20px; }
+.day-nav { padding: 12px 28px 0; }
+.day-grid-nav { max-width: 600px; gap: 8px; }
+.day-btn { padding: 11px 8px 13px; border-radius: 10px 10px 0 0; }
+.day-btn .dlabel { font-size: 11px; }
+.day-btn .dnum { font-size: 22px; }
+.day-btn .dtype { font-size: 10px; padding: 2px 7px; }
+.main { padding: 20px 28px 100px; }
+.ex-header { padding: 13px 14px; }
+.ex-name { font-size: 14px; }
+.ex-sets { max-width: none; gap: 6px; flex-wrap: nowrap; }
+.set-dot { width: 16px; height: 16px; }
+.day-hero-title { font-size: 18px; }
+.day-hero-icon { font-size: 36px; }
+}
+
+/* ─── VERY SMALL (≤360px) ─── */
+@media (max-width: 360px) {
+.header h1 { font-size: 14px; }
+.header p { display: none; }
+.header-icon { width: 32px; height: 32px; font-size: 16px; border-radius: 10px; }
+.day-btn .dnum { font-size: 16px; }
+.day-btn .dtype { display: none; }
+.day-btn { padding: 7px 2px 8px; }
+.main { padding: 12px 10px 100px; }
+.ex-name { font-size: 12.5px; }
+.ex-detail { font-size: 10.5px; }
+.ex-sets { max-width: 60px; }
+.set-dot { width: 12px; height: 12px; }
+.day-hero-title { font-size: 15px; }
+.day-hero-icon { font-size: 28px; }
+.cardio-min { font-size: 22px; }
+}
+
+/* ─── PRINT ─── */
+@media print {
+.header, .day-nav, .fab { display: none; }
+.day-panel { display: block !important; }
+.main { padding: 16px; }
+.ex-card { break-inside: avoid; }
+}
+
+/* ─── REDUCED MOTION ─── */
+@media (prefers-reduced-motion: reduce) {
+.day-panel.active { animation: none; }
+.ex-card, .set-dot, .fab { transition: none; }
+.prog-fill { transition: none; }
+}
+
+/* ─── Aviso después de entrenar ─── */
+.after-tip { background: rgba(181,140,255,0.08); border: 1px solid rgba(181,140,255,0.25); border-radius: 14px; padding: 10px 12px; font-size: 12px; color: var(--text2); display: flex; gap: 8px; margin-bottom: 7px; line-height: 1.45; }
+.after-tip strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<header class="header">
+<div class="header-row1">
+<div class="header-top">
+<div class="header-icon">💪</div>
+<div>
+<h1>Rutina de Entrenamiento</h1>
+<p>Mipre · Karina Andrea Vargas Moreno · Plan Camilo Roa</p>
+</div>
+</div>
+<a href="index.html" class="btn-back">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<line x1="19" y1="12" x2="5" y2="12"></line>
+<polyline points="12 19 5 12 12 5"></polyline>
+</svg>
+Volver
+</a>
+</div>
+<div class="week-pills">
+<div class="week-pill active"></div>
+<div class="week-pill"></div>
+<div class="week-pill"></div>
+<div class="week-pill"></div>
+<div class="week-pill"></div>
+</div>
+</header>
+
+<nav class="day-nav">
+<div class="day-grid-nav">
+<button class="day-btn active" onclick="showDay(0)" id="btn-0">
+<span class="dlabel">Día</span>
+<span class="dnum">1</span>
+<span class="dtype" style="background:rgba(214,0,107,0.18);color:#FF5CAB">Inferior</span>
+</button>
+<button class="day-btn" onclick="showDay(1)" id="btn-1">
+<span class="dlabel">Día</span>
+<span class="dnum">2</span>
+<span class="dtype" style="background:rgba(181,140,255,0.15);color:#B58CFF">Superior</span>
+</button>
+<button class="day-btn" onclick="showDay(2)" id="btn-2">
+<span class="dlabel">Día</span>
+<span class="dnum">3</span>
+<span class="dtype" style="background:rgba(214,0,107,0.18);color:#FF5CAB">Inferior</span>
+</button>
+<button class="day-btn" onclick="showDay(3)" id="btn-3">
+<span class="dlabel">Día</span>
+<span class="dnum">4</span>
+<span class="dtype" style="background:rgba(181,140,255,0.15);color:#B58CFF">Superior</span>
+</button>
+<button class="day-btn" onclick="showDay(4)" id="btn-4">
+<span class="dlabel">Día</span>
+<span class="dnum">5</span>
+<span class="dtype" style="background:rgba(214,0,107,0.18);color:#FF5CAB">Inferior</span>
+</button>
+</div>
+</nav>
+
+<main class="main">
+
+<div class="day-panel active" id="day-0">
+<div class="day-hero" style="background:linear-gradient(135deg,rgba(214,0,107,0.10),rgba(214,0,107,0.03));border-color:rgba(214,0,107,0.35);">
+<div class="day-hero-icon">🍑</div>
+<div>
+<div class="day-hero-title">Tren Inferior</div>
+<div class="day-hero-sub" style="color:#FF5CAB">
+<span class="badge" style="background:rgba(214,0,107,0.18);color:#FF5CAB">🔥 12 rep al fallo</span><span class="badge" style="background:rgba(255,184,48,0.15);color:#FFB830">⏱ Descanso 20–30 seg</span>
+</div>
+</div>
+</div>
+<div class="rules-grid">
+<div class="rule-box"><div class="rule-label">Repeticiones</div><div class="rule-val">12 rep al fallo</div><div class="rule-sub">Talones: 20 rep</div></div>
+<div class="rule-box"><div class="rule-label">Descanso</div><div class="rule-val">Series: 30 seg</div><div class="rule-sub">Biseries 1 min · Triseries 2 min</div></div>
+<div class="rule-box"><div class="rule-label">Peso</div><div class="rule-val">Hasta el fallo</div><div class="rule-sub">Exigente, sin perder la técnica</div></div>
+<div class="rule-box"><div class="rule-label">Series hoy</div><div class="rule-val">Varían por ejercicio</div><div class="rule-sub">Marca cada serie</div></div>
+</div>
+<div class="prog-wrap">
+<div class="prog-top"><span class="prog-title">Progreso del día</span><span class="prog-pct" id="pct-0">0%</span></div>
+<div class="prog-bar"><div class="prog-fill" id="bar-0"></div></div>
+</div>
+<div class="sec-label">Pantorrilla y glúteo</div>
+<div class="ex-card">
+<div class="ex-header">
+<div class="ex-num" style="background:rgba(214,0,107,0.18);color:#FF5CAB">1</div>
+<div class="ex-info"><div class="ex-name">Elevación de talones de pie</div><div class="ex-detail">4 series × 20 rep</div></div>
+<div class="ex-right">
+<div class="ex-sets"><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div></div>
+<div class="ex-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+</div>
+</div>
+</div>
+<div class="ex-card">
+<div class="ex-header">
+<div class="ex-num" style="background:rgba(214,0,107,0.18);color:#FF5CAB">2</div>
+<div class="ex-info"><div class="ex-name">Hip Thrusters</div><div class="ex-detail">5 series × 12 rep al fallo</div></div>
+<div class="ex-right">
+<div class="ex-sets"><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div></div>
+<div class="ex-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+</div>
+</div>
+</div>
+<div class="sec-label">Biseries</div>
+<div class="tri-card open">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(214,0,107,0.18);color:#FF5CAB">BISERIE ×4</div>
+<div class="tri-name">3 · Sentadilla libre + Press de piernas</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Sentadilla libre con barra</div><div class="tri-reps">×12</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Press de piernas</div><div class="tri-reps">×12</div></div>
+</div>
+</div>
+<div class="sec-label">Triseries</div>
+<div class="tri-card">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(214,0,107,0.18);color:#FF5CAB">TRISERIE ×4</div>
+<div class="tri-name">4 · Pierna y sentadillas</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Extensión de pierna sentada</div><div class="tri-reps">×12</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Sentadilla Smith</div><div class="tri-reps">×12</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Sentadilla sumo con mancuerna sobre step</div><div class="tri-reps">×12</div></div>
+</div>
+</div>
+<div class="sec-label">Final</div>
+<div class="ex-card">
+<div class="ex-header">
+<div class="ex-num" style="background:rgba(214,0,107,0.18);color:#FF5CAB">5</div>
+<div class="ex-info"><div class="ex-name">Abducción en máquina</div><div class="ex-detail">3 series × 12 rep al fallo</div></div>
+<div class="ex-right">
+<div class="ex-sets"><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div></div>
+<div class="ex-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+</div>
+</div>
+</div>
+<div class="cardio-card">
+<div class="cardio-icon">🏃‍♀️</div>
+<div><div class="cardio-title">Cardio Final — Intenso</div><div class="cardio-detail">Trote a velocidad mínima de 6 (intervalos de 4×1)<br>o escaleras, sin apoyar los brazos</div></div>
+<div class="cardio-timer"><div class="cardio-min">30</div><div class="cardio-lbl">minutos</div></div>
+</div>
+<div class="after-tip"><span>💧</span><span><strong>Después de entrenar:</strong> solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida con 1 copa de proteína + 50 g de fruta.</span></div>
+</div>
+
+<div class="day-panel" id="day-1">
+<div class="day-hero" style="background:linear-gradient(135deg,rgba(181,140,255,0.10),rgba(181,140,255,0.03));border-color:rgba(181,140,255,0.3);">
+<div class="day-hero-icon">💪</div>
+<div>
+<div class="day-hero-title">Tren Superior + Abdomen</div>
+<div class="day-hero-sub" style="color:#B58CFF">
+<span class="badge" style="background:rgba(181,140,255,0.15);color:#B58CFF">💪 8–12 rep</span><span class="badge" style="background:rgba(255,184,48,0.15);color:#FFB830">⏱ Descanso 20–30 seg</span>
+</div>
+</div>
+</div>
+<div class="rules-grid">
+<div class="rule-box"><div class="rule-label">Repeticiones</div><div class="rule-val">8 – 12 rep</div><div class="rule-sub">Hasta fallo muscular</div></div>
+<div class="rule-box"><div class="rule-label">Descanso</div><div class="rule-val">Series: 30 seg</div><div class="rule-sub">Biseries 1 min · Triseries 2 min</div></div>
+<div class="rule-box"><div class="rule-label">Peso</div><div class="rule-val">Fallo en rep 8–10</div><div class="rule-sub">Ni más ni menos</div></div>
+<div class="rule-box"><div class="rule-label">Series hoy</div><div class="rule-val">3 series c/u</div><div class="rule-sub">Marca cada serie</div></div>
+</div>
+<div class="prog-wrap">
+<div class="prog-top"><span class="prog-title">Progreso del día</span><span class="prog-pct" id="pct-1">0%</span></div>
+<div class="prog-bar"><div class="prog-fill" id="bar-1"></div></div>
+</div>
+<div class="sec-label">Espalda</div>
+<div class="tri-card open">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(181,140,255,0.15);color:#B58CFF">BISERIE ×3</div>
+<div class="tri-name">1 · Jalón remo + Jalón por delante</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Jalón remo sentada</div><div class="tri-reps">×10</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Jalón por delante en polea alta, agarre abierto</div><div class="tri-reps">×10</div></div>
+</div>
+</div>
+<div class="ex-card">
+<div class="ex-header">
+<div class="ex-num" style="background:rgba(181,140,255,0.15);color:#B58CFF">2</div>
+<div class="ex-info"><div class="ex-name">Jalón vertical con mancuerna (serruchos)</div><div class="ex-detail">3 series × 10 rep</div></div>
+<div class="ex-right">
+<div class="ex-sets"><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div></div>
+<div class="ex-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+</div>
+</div>
+</div>
+<div class="sec-label">Hombro y cable cruzado</div>
+<div class="tri-card">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(181,140,255,0.15);color:#B58CFF">BISERIE ×3</div>
+<div class="tri-name">3 · Frontal de hombro + Press Arnold</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Frontal de hombro en polea baja individual</div><div class="tri-reps">×10</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Press Arnold de pie</div><div class="tri-reps">×10</div></div>
+</div>
+</div>
+<div class="tri-card">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(181,140,255,0.15);color:#B58CFF">BISERIE ×3</div>
+<div class="tri-name">4 · Cable cruzado + Press militar</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Cable cruzado en polea</div><div class="tri-reps">×10</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Press militar</div><div class="tri-reps">×10</div></div>
+</div>
+</div>
+<div class="sec-label">Triseries — Bíceps</div>
+<div class="tri-card">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(181,140,255,0.15);color:#B58CFF">TRISERIE ×3</div>
+<div class="tri-name">5 · Bíceps — 3 ejercicios</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Curl martillo</div><div class="tri-reps">×10</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Curl con mancuernas de pie</div><div class="tri-reps">×10</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Curl con barra Z en banco predicador</div><div class="tri-reps">×10</div></div>
+</div>
+</div>
+<div class="sec-label">Triseries — Tríceps</div>
+<div class="tri-card">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(181,140,255,0.15);color:#B58CFF">TRISERIE ×3</div>
+<div class="tri-name">6 · Tríceps — 3 ejercicios</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Copa a dos manos</div><div class="tri-reps">×10</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Jalones en polea con cuerda</div><div class="tri-reps">×10</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Patada de mula a dos manos</div><div class="tri-reps">×10</div></div>
+</div>
+</div>
+<div class="sec-label">Abdomen</div>
+<div class="ab-card">
+<div class="ab-header" onclick="toggleAb(this)">
+<span style="font-size:20px">🔥</span>
+<div class="ab-title">Abdomen</div>
+<div class="ab-sets"><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div></div>
+<div class="ab-check" onclick="toggleAbDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="ab-arrow">▾</div>
+</div>
+<div class="ab-body">
+<div class="ab-ex"><span>🧱</span> Planchas con 1 pie elevado — 4 × 1 min</div>
+<div class="ab-ex"><span>🔄</span> Rodillo — 3 × 15</div>
+<div class="ab-ex"><span>🦵</span> Crunch de rodillas en M — 3 × 20</div>
+<div class="ab-ex"><span>🪓</span> Cortaleñas con disco — 3 × 25</div>
+</div>
+</div>
+<div class="cardio-card">
+<div class="cardio-icon">🏃‍♀️</div>
+<div><div class="cardio-title">Cardio Final — Intenso</div><div class="cardio-detail">Trote a velocidad mínima de 6 (intervalos de 4×1)<br>o escaleras, sin apoyar los brazos</div></div>
+<div class="cardio-timer"><div class="cardio-min">30</div><div class="cardio-lbl">minutos</div></div>
+</div>
+<div class="after-tip"><span>💧</span><span><strong>Después de entrenar:</strong> solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida del plan.</span></div>
+</div>
+
+<div class="day-panel" id="day-2">
+<div class="day-hero" style="background:linear-gradient(135deg,rgba(214,0,107,0.10),rgba(214,0,107,0.03));border-color:rgba(214,0,107,0.35);">
+<div class="day-hero-icon">🦵</div>
+<div>
+<div class="day-hero-title">Tren Inferior</div>
+<div class="day-hero-sub" style="color:#FF5CAB">
+<span class="badge" style="background:rgba(214,0,107,0.18);color:#FF5CAB">🔥 12 rep al fallo</span><span class="badge" style="background:rgba(255,184,48,0.15);color:#FFB830">⏱ Descanso 20–30 seg</span>
+</div>
+</div>
+</div>
+<div class="rules-grid">
+<div class="rule-box"><div class="rule-label">Repeticiones</div><div class="rule-val">12 rep al fallo</div><div class="rule-sub">Talones: 20 rep</div></div>
+<div class="rule-box"><div class="rule-label">Descanso</div><div class="rule-val">Series: 30 seg</div><div class="rule-sub">Biseries 1 min · Triseries 2 min</div></div>
+<div class="rule-box"><div class="rule-label">Peso</div><div class="rule-val">Hasta el fallo</div><div class="rule-sub">Exigente, sin perder la técnica</div></div>
+<div class="rule-box"><div class="rule-label">Series hoy</div><div class="rule-val">Varían por ejercicio</div><div class="rule-sub">Marca cada serie</div></div>
+</div>
+<div class="prog-wrap">
+<div class="prog-top"><span class="prog-title">Progreso del día</span><span class="prog-pct" id="pct-2">0%</span></div>
+<div class="prog-bar"><div class="prog-fill" id="bar-2"></div></div>
+</div>
+<div class="sec-label">Pantorrilla y glúteo</div>
+<div class="ex-card">
+<div class="ex-header">
+<div class="ex-num" style="background:rgba(214,0,107,0.18);color:#FF5CAB">1</div>
+<div class="ex-info"><div class="ex-name">Elevación de talones de pie</div><div class="ex-detail">4 series × 20 rep</div></div>
+<div class="ex-right">
+<div class="ex-sets"><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div></div>
+<div class="ex-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+</div>
+</div>
+</div>
+<div class="ex-card">
+<div class="ex-header">
+<div class="ex-num" style="background:rgba(214,0,107,0.18);color:#FF5CAB">2</div>
+<div class="ex-info"><div class="ex-name">Hip Thrusters</div><div class="ex-detail">4 series × 12 rep al fallo</div></div>
+<div class="ex-right">
+<div class="ex-sets"><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div></div>
+<div class="ex-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+</div>
+</div>
+</div>
+<div class="sec-label">Biseries</div>
+<div class="tri-card open">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(214,0,107,0.18);color:#FF5CAB">BISERIE ×4</div>
+<div class="tri-name">3 · Sentadilla libre + Press de piernas</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Sentadilla libre con barra</div><div class="tri-reps">×12</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Press de piernas</div><div class="tri-reps">×12</div></div>
+</div>
+</div>
+<div class="sec-label">Triseries</div>
+<div class="tri-card">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(214,0,107,0.18);color:#FF5CAB">TRISERIE ×4</div>
+<div class="tri-name">4 · Pierna y sentadillas</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Extensión de pierna sentada</div><div class="tri-reps">×12</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Sentadilla Smith</div><div class="tri-reps">×12</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Sentadilla sumo con mancuerna sobre step</div><div class="tri-reps">×12</div></div>
+</div>
+</div>
+<div class="sec-label">Final</div>
+<div class="ex-card">
+<div class="ex-header">
+<div class="ex-num" style="background:rgba(214,0,107,0.18);color:#FF5CAB">5</div>
+<div class="ex-info"><div class="ex-name">Abducción en máquina</div><div class="ex-detail">3 series × 12 rep al fallo</div></div>
+<div class="ex-right">
+<div class="ex-sets"><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div></div>
+<div class="ex-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+</div>
+</div>
+</div>
+<div class="cardio-card">
+<div class="cardio-icon">🏃‍♀️</div>
+<div><div class="cardio-title">Cardio Final — Intenso</div><div class="cardio-detail">Trote a velocidad mínima de 6 (intervalos de 4×1)<br>o escaleras, sin apoyar los brazos</div></div>
+<div class="cardio-timer"><div class="cardio-min">30</div><div class="cardio-lbl">minutos</div></div>
+</div>
+<div class="after-tip"><span>💧</span><span><strong>Después de entrenar:</strong> solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida con 1 copa de proteína + 50 g de fruta.</span></div>
+</div>
+
+<div class="day-panel" id="day-3">
+<div class="day-hero" style="background:linear-gradient(135deg,rgba(181,140,255,0.10),rgba(181,140,255,0.03));border-color:rgba(181,140,255,0.3);">
+<div class="day-hero-icon">🏋️‍♀️</div>
+<div>
+<div class="day-hero-title">Tren Superior + Abdomen</div>
+<div class="day-hero-sub" style="color:#B58CFF">
+<span class="badge" style="background:rgba(181,140,255,0.15);color:#B58CFF">💪 8–12 rep</span><span class="badge" style="background:rgba(255,184,48,0.15);color:#FFB830">⏱ Descanso 20–30 seg</span>
+</div>
+</div>
+</div>
+<div class="rules-grid">
+<div class="rule-box"><div class="rule-label">Repeticiones</div><div class="rule-val">8 – 12 rep</div><div class="rule-sub">Hasta fallo muscular</div></div>
+<div class="rule-box"><div class="rule-label">Descanso</div><div class="rule-val">Series: 30 seg</div><div class="rule-sub">Biseries 1 min · Triseries 2 min</div></div>
+<div class="rule-box"><div class="rule-label">Peso</div><div class="rule-val">Fallo en rep 8–10</div><div class="rule-sub">Ni más ni menos</div></div>
+<div class="rule-box"><div class="rule-label">Series hoy</div><div class="rule-val">3 series c/u</div><div class="rule-sub">Marca cada serie</div></div>
+</div>
+<div class="prog-wrap">
+<div class="prog-top"><span class="prog-title">Progreso del día</span><span class="prog-pct" id="pct-3">0%</span></div>
+<div class="prog-bar"><div class="prog-fill" id="bar-3"></div></div>
+</div>
+<div class="sec-label">Espalda</div>
+<div class="tri-card open">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(181,140,255,0.15);color:#B58CFF">BISERIE ×3</div>
+<div class="tri-name">1 · Jalón remo + Jalón por delante</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Jalón remo sentada</div><div class="tri-reps">×10</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Jalón por delante en polea alta, agarre abierto</div><div class="tri-reps">×10</div></div>
+</div>
+</div>
+<div class="ex-card">
+<div class="ex-header">
+<div class="ex-num" style="background:rgba(181,140,255,0.15);color:#B58CFF">2</div>
+<div class="ex-info"><div class="ex-name">Jalón vertical con mancuerna (serruchos)</div><div class="ex-detail">3 series × 10 rep</div></div>
+<div class="ex-right">
+<div class="ex-sets"><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div></div>
+<div class="ex-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+</div>
+</div>
+</div>
+<div class="sec-label">Hombro y cable cruzado</div>
+<div class="tri-card">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(181,140,255,0.15);color:#B58CFF">BISERIE ×3</div>
+<div class="tri-name">3 · Frontal de hombro + Press Arnold</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Frontal de hombro en polea baja individual</div><div class="tri-reps">×10</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Press Arnold de pie</div><div class="tri-reps">×10</div></div>
+</div>
+</div>
+<div class="tri-card">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(181,140,255,0.15);color:#B58CFF">BISERIE ×3</div>
+<div class="tri-name">4 · Cable cruzado + Press militar</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Cable cruzado en polea</div><div class="tri-reps">×10</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Press militar</div><div class="tri-reps">×10</div></div>
+</div>
+</div>
+<div class="sec-label">Triseries — Bíceps</div>
+<div class="tri-card">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(181,140,255,0.15);color:#B58CFF">TRISERIE ×3</div>
+<div class="tri-name">5 · Bíceps — 3 ejercicios</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Curl martillo</div><div class="tri-reps">×10</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Curl con mancuernas de pie</div><div class="tri-reps">×10</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Curl con barra Z en banco predicador</div><div class="tri-reps">×10</div></div>
+</div>
+</div>
+<div class="sec-label">Triseries — Tríceps</div>
+<div class="tri-card">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(181,140,255,0.15);color:#B58CFF">TRISERIE ×3</div>
+<div class="tri-name">6 · Tríceps — 3 ejercicios</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Copa a dos manos</div><div class="tri-reps">×10</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Jalones en polea con cuerda</div><div class="tri-reps">×10</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#B58CFF"></div><div class="tri-text">Patada de mula a dos manos</div><div class="tri-reps">×10</div></div>
+</div>
+</div>
+<div class="sec-label">Abdomen</div>
+<div class="ab-card">
+<div class="ab-header" onclick="toggleAb(this)">
+<span style="font-size:20px">🔥</span>
+<div class="ab-title">Abdomen</div>
+<div class="ab-sets"><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div></div>
+<div class="ab-check" onclick="toggleAbDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="ab-arrow">▾</div>
+</div>
+<div class="ab-body">
+<div class="ab-ex"><span>🧱</span> Planchas con 1 pie elevado — 4 × 1 min</div>
+<div class="ab-ex"><span>🔄</span> Rodillo — 3 × 15</div>
+<div class="ab-ex"><span>🦵</span> Crunch de rodillas en M — 3 × 20</div>
+<div class="ab-ex"><span>🪓</span> Cortaleñas con disco — 3 × 25</div>
+</div>
+</div>
+<div class="cardio-card">
+<div class="cardio-icon">🏃‍♀️</div>
+<div><div class="cardio-title">Cardio Final — Intenso</div><div class="cardio-detail">Trote a velocidad mínima de 6 (intervalos de 4×1)<br>o escaleras, sin apoyar los brazos</div></div>
+<div class="cardio-timer"><div class="cardio-min">30</div><div class="cardio-lbl">minutos</div></div>
+</div>
+<div class="after-tip"><span>💧</span><span><strong>Después de entrenar:</strong> solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida del plan.</span></div>
+</div>
+
+<div class="day-panel" id="day-4">
+<div class="day-hero" style="background:linear-gradient(135deg,rgba(214,0,107,0.10),rgba(214,0,107,0.03));border-color:rgba(214,0,107,0.35);">
+<div class="day-hero-icon">🔥</div>
+<div>
+<div class="day-hero-title">Tren Inferior</div>
+<div class="day-hero-sub" style="color:#FF5CAB">
+<span class="badge" style="background:rgba(214,0,107,0.18);color:#FF5CAB">🔥 12 rep al fallo</span><span class="badge" style="background:rgba(255,184,48,0.15);color:#FFB830">⏱ Descanso 20–30 seg</span>
+</div>
+</div>
+</div>
+<div class="rules-grid">
+<div class="rule-box"><div class="rule-label">Repeticiones</div><div class="rule-val">12 rep al fallo</div><div class="rule-sub">Talones: 20 rep</div></div>
+<div class="rule-box"><div class="rule-label">Descanso</div><div class="rule-val">Series: 30 seg</div><div class="rule-sub">Biseries 1 min · Triseries 2 min</div></div>
+<div class="rule-box"><div class="rule-label">Peso</div><div class="rule-val">Hasta el fallo</div><div class="rule-sub">Exigente, sin perder la técnica</div></div>
+<div class="rule-box"><div class="rule-label">Series hoy</div><div class="rule-val">Varían por ejercicio</div><div class="rule-sub">Marca cada serie</div></div>
+</div>
+<div class="prog-wrap">
+<div class="prog-top"><span class="prog-title">Progreso del día</span><span class="prog-pct" id="pct-4">0%</span></div>
+<div class="prog-bar"><div class="prog-fill" id="bar-4"></div></div>
+</div>
+<div class="sec-label">Pantorrilla y glúteo</div>
+<div class="ex-card">
+<div class="ex-header">
+<div class="ex-num" style="background:rgba(214,0,107,0.18);color:#FF5CAB">1</div>
+<div class="ex-info"><div class="ex-name">Elevación de talones de pie</div><div class="ex-detail">4 series × 20 rep</div></div>
+<div class="ex-right">
+<div class="ex-sets"><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div></div>
+<div class="ex-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+</div>
+</div>
+</div>
+<div class="ex-card">
+<div class="ex-header">
+<div class="ex-num" style="background:rgba(214,0,107,0.18);color:#FF5CAB">2</div>
+<div class="ex-info"><div class="ex-name">Hip Thrusters</div><div class="ex-detail">5 series × 12 rep al fallo</div></div>
+<div class="ex-right">
+<div class="ex-sets"><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div></div>
+<div class="ex-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+</div>
+</div>
+</div>
+<div class="sec-label">Biseries</div>
+<div class="tri-card open">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(214,0,107,0.18);color:#FF5CAB">BISERIE ×4</div>
+<div class="tri-name">3 · Sentadilla libre + Press de piernas</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Sentadilla libre con barra</div><div class="tri-reps">×12</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Press de piernas</div><div class="tri-reps">×12</div></div>
+</div>
+</div>
+<div class="sec-label">Triseries</div>
+<div class="tri-card">
+<div class="tri-header" onclick="toggleTri(this)">
+<div class="tri-badge" style="background:rgba(214,0,107,0.18);color:#FF5CAB">TRISERIE ×4</div>
+<div class="tri-name">4 · Pierna y sentadillas</div>
+<div class="tri-sets"><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div><div class="set-dot" onclick="litSet(event,this);checkTri(event)"></div></div>
+<div class="tri-check" onclick="toggleTriDone(event,this)"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="tri-arrow">▾</div>
+</div>
+<div class="tri-body">
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Extensión de pierna sentada</div><div class="tri-reps">×12</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Sentadilla Smith</div><div class="tri-reps">×12</div></div>
+<div class="tri-ex"><div class="tri-dot" style="background:#D6006B"></div><div class="tri-text">Sentadilla sumo con mancuerna sobre step</div><div class="tri-reps">×12</div></div>
+</div>
+</div>
+<div class="sec-label">Final</div>
+<div class="ex-card">
+<div class="ex-header">
+<div class="ex-num" style="background:rgba(214,0,107,0.18);color:#FF5CAB">5</div>
+<div class="ex-info"><div class="ex-name">Abducción en máquina</div><div class="ex-detail">3 series × 12 rep al fallo</div></div>
+<div class="ex-right">
+<div class="ex-sets"><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div><div class="set-dot" onclick="litSet(event,this)"></div></div>
+<div class="ex-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none"><path d="M1.5 5.5L5 9L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+</div>
+</div>
+</div>
+<div class="cardio-card">
+<div class="cardio-icon">🏃‍♀️</div>
+<div><div class="cardio-title">Cardio Final — Intenso</div><div class="cardio-detail">Trote a velocidad mínima de 6 (intervalos de 4×1)<br>o escaleras, sin apoyar los brazos</div></div>
+<div class="cardio-timer"><div class="cardio-min">30</div><div class="cardio-lbl">minutos</div></div>
+</div>
+<div class="after-tip"><span>💧</span><span><strong>Después de entrenar:</strong> solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida con 1 copa de proteína + 50 g de fruta.</span></div>
+</div>
+
+</main>
+
+<button class="fab" id="fabBtn" onclick="fabAction()">✓ Marcar ejercicio</button>
+
+<script>
+// Fix sticky nav top dynamically
+function fixStickyNav() {
+var h = document.querySelector('.header').offsetHeight;
+document.querySelector('.day-nav').style.top = h + 'px';
+}
+fixStickyNav();
+window.addEventListener('resize', fixStickyNav);
+
+function showDay(idx) {
+document.querySelectorAll('.day-panel').forEach(function(p){ p.classList.remove('active'); });
+document.querySelectorAll('.day-btn').forEach(function(b){ b.classList.remove('active'); });
+document.querySelectorAll('.week-pill').forEach(function(p,i){ i===idx ? p.classList.add('active') : p.classList.remove('active'); });
+document.getElementById('day-'+idx).classList.add('active');
+document.getElementById('btn-'+idx).classList.add('active');
+
+// Scroll descontando header + day-nav
+var headerH = document.querySelector('.header').offsetHeight;
+var navH = document.querySelector('.day-nav').offsetHeight;
+var mainTop = document.querySelector('.main').getBoundingClientRect().top + window.scrollY;
+window.scrollTo({ top: mainTop - headerH - navH - 8, behavior: 'smooth' });
+
+updateFab(idx);
+}
+
+// Attach click to each ex-card
+document.querySelectorAll('.ex-card').forEach(function(card) {
+card.addEventListener('click', function(ev) {
+if (ev.target.closest('.set-dot') || ev.target.closest('.ex-check')) return;
+toggleCard(card);
+});
+var chk = card.querySelector('.ex-check');
+if (chk) {
+chk.addEventListener('click', function(ev) {
+ev.stopPropagation();
+toggleCard(card);
+});
+}
+});
+
+function toggleCard(card) {
+var wasDone = card.classList.contains('done');
+card.classList.toggle('done');
+var dots = Array.from(card.querySelectorAll('.set-dot'));
+if (!wasDone) {
+dots.forEach(function(d) { d.classList.add('lit'); });
+} else {
+dots.forEach(function(d) { d.classList.remove('lit'); });
+}
+var panel = card.closest('.day-panel');
+var idx = Array.from(document.querySelectorAll('.day-panel')).indexOf(panel);
+updateProgress(idx);
+}
+
+function litSet(e, dot) {
+e.stopPropagation();
+var container = dot.parentElement;
+var dots = Array.from(container.children);
+var idx = dots.indexOf(dot);
+var litCount = dots.filter(function(d){ return d.classList.contains('lit'); }).length;
+if (dot.classList.contains('lit') && litCount === idx + 1) {
+dot.classList.remove('lit');
+} else {
+dots.forEach(function(d, i){ i <= idx ? d.classList.add('lit') : d.classList.remove('lit'); });
+}
+var allLit = dots.every(function(d){ return d.classList.contains('lit'); });
+var panel = null;
+var dayIdx = -1;
+// ex-card
+var card = dot.closest('.ex-card');
+if (card) {
+if (allLit && !card.classList.contains('done')) { card.classList.add('done'); }
+else if (!allLit) { card.classList.remove('done'); }
+panel = card.closest('.day-panel');
+dayIdx = Array.from(document.querySelectorAll('.day-panel')).indexOf(panel);
+updateProgress(dayIdx);
+return;
+}
+// tri-card
+var tri = dot.closest('.tri-card');
+if (tri) {
+tri.classList.toggle('done-tri', allLit);
+panel = tri.closest('.day-panel');
+dayIdx = Array.from(document.querySelectorAll('.day-panel')).indexOf(panel);
+updateProgress(dayIdx);
+return;
+}
+// ab-card
+var ab = dot.closest('.ab-card');
+if (ab) {
+ab.classList.toggle('done-ab', allLit);
+panel = ab.closest('.day-panel');
+dayIdx = Array.from(document.querySelectorAll('.day-panel')).indexOf(panel);
+updateProgress(dayIdx);
+return;
+}
+}
+
+function updateProgress(dayIdx) {
+var panel = document.getElementById('day-'+dayIdx);
+if (!panel) return;
+var exTotal = panel.querySelectorAll('.ex-card').length;
+var triTotal = panel.querySelectorAll('.tri-card').length;
+var abTotal = panel.querySelectorAll('.ab-card').length;
+var total = exTotal + triTotal + abTotal;
+if (total === 0) total = 1;
+var exDone = panel.querySelectorAll('.ex-card.done').length;
+var triDone = panel.querySelectorAll('.tri-card.done-tri').length;
+var abDone = panel.querySelectorAll('.ab-card.done-ab').length;
+var done = exDone + triDone + abDone;
+var pct = Math.round((done/total)*100);
+var bar = document.getElementById('bar-'+dayIdx);
+var pctEl = document.getElementById('pct-'+dayIdx);
+if (bar) bar.style.width = pct+'%';
+if (pctEl) pctEl.textContent = pct+'%';
+}
+
+function toggleTri(header) { header.closest('.tri-card').classList.toggle('open'); }
+
+function toggleTriDone(e, btn) {
+e.stopPropagation();
+var card = btn.closest('.tri-card');
+var isDone = card.classList.contains('done-tri');
+var dots = Array.from(card.querySelectorAll('.set-dot'));
+if (!isDone) {
+  card.classList.add('done-tri');
+  dots.forEach(function(d){ d.classList.add('lit'); });
+} else {
+  card.classList.remove('done-tri');
+  dots.forEach(function(d){ d.classList.remove('lit'); });
+}
+var panel = card.closest('.day-panel');
+var idx = Array.from(document.querySelectorAll('.day-panel')).indexOf(panel);
+updateProgress(idx);
+}
+
+function toggleAbDone(e, btn) {
+e.stopPropagation();
+var card = btn.closest('.ab-card');
+var isDone = card.classList.contains('done-ab');
+var dots = Array.from(card.querySelectorAll('.set-dot'));
+if (!isDone) {
+  card.classList.add('done-ab');
+  dots.forEach(function(d){ d.classList.add('lit'); });
+} else {
+  card.classList.remove('done-ab');
+  dots.forEach(function(d){ d.classList.remove('lit'); });
+}
+var panel = card.closest('.day-panel');
+var idx = Array.from(document.querySelectorAll('.day-panel')).indexOf(panel);
+updateProgress(idx);
+}
+function checkTri(e) {
+e.stopPropagation();
+var card = e.target.closest('.tri-card');
+if (!card) return;
+var dots = card.querySelectorAll('.set-dot');
+var allLit = Array.from(dots).every(function(d){ return d.classList.contains('lit'); });
+card.classList.toggle('done-tri', allLit);
+var panel = card.closest('.day-panel');
+var idx = Array.from(document.querySelectorAll('.day-panel')).indexOf(panel);
+updateProgress(idx);
+}
+function toggleAb(header) { header.closest('.ab-card').classList.toggle('open'); }
+function fabAction() {
+var active = document.querySelector('.day-panel.active');
+var next = active.querySelector('.ex-card:not(.done), .tri-card:not(.done-tri), .ab-card:not(.done-ab)');
+if (!next) return;
+next.querySelectorAll('.set-dot').forEach(function(d){ d.classList.add('lit'); });
+if (next.classList.contains('ex-card')) next.classList.add('done');
+else if (next.classList.contains('tri-card')) next.classList.add('done-tri');
+else next.classList.add('done-ab');
+var idx = Array.from(document.querySelectorAll('.day-panel')).indexOf(active);
+updateProgress(idx);
+next.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function updateFab(idx) {
+document.getElementById('fabBtn').style.display = 'flex';
+}
+</script>
+</body>
+</html>
