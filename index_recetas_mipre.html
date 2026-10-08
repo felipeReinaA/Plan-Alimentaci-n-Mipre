@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recetas con Vegetales — Mipre</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FBF8FF;
+  --card: #FFFFFF;
+  --lilac: #7B57B5;
+  --lilac-dark: #5B3E96;
+  --lilac-light: #E3D6F7;
+  --lilac-pale: #F6F1FD;
+  --pink: #D6006B;
+  --pink-light: #FFE0EF;
+  --mint: #2F7D68;
+  --mint-light: #DDF5EC;
+  --amber: #8A5A12;
+  --amber-light: #FEF3D6;
+  --gray-900: #2A2238;
+  --gray-700: #4A3F5F;
+  --gray-500: #6E6486;
+  --gray-300: #D8D0E8;
+  --gray-200: #E8E1F4;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'Nunito', system-ui, sans-serif; background: var(--bg); color: var(--gray-900); line-height: 1.5; padding-bottom: 40px; }
+
+.header { background: linear-gradient(135deg, #7B57B5 0%, #5B3E96 100%); color: white; padding: 20px 18px 18px; box-shadow: 0 4px 20px rgba(91,62,150,0.3); }
+.header-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; max-width: 720px; margin: 0 auto; }
+.header h1 { font-size: 21px; font-weight: 800; line-height: 1.2; }
+.header p { font-size: 13px; opacity: .85; margin-top: 3px; }
+.btn-back { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.35); border-radius: 20px; color: white; font-size: 13px; font-weight: 700; text-decoration: none; flex-shrink: 0; transition: background .2s; }
+.btn-back:hover { background: rgba(255,255,255,0.3); }
+.btn-back:focus-visible, .chip:focus-visible, .rec-head:focus-visible { outline: 3px solid var(--pink); outline-offset: 2px; }
+
+.wrap { max-width: 720px; margin: 0 auto; padding: 16px 16px 0; }
+
+.rule-box { background: var(--lilac-pale); border: 1.5px solid #D6C6F2; border-radius: 16px; padding: 14px 16px; font-size: 13.5px; color: var(--gray-700); display: flex; gap: 10px; margin-bottom: 14px; }
+.rule-box strong { color: var(--lilac-dark); }
+
+.chips { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 12px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex-shrink: 0; border: 1.5px solid var(--gray-300); background: white; color: var(--gray-700); font-family: inherit; font-size: 13px; font-weight: 700; padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: all .15s; }
+.chip.active { background: var(--pink); border-color: var(--pink); color: white; }
+
+.rec { background: var(--card); border: 1.5px solid var(--gray-200); border-radius: 18px; margin-bottom: 10px; overflow: hidden; transition: box-shadow .2s, border-color .2s; }
+.rec.open { border-color: #C9B2F0; box-shadow: 0 6px 22px rgba(123,87,181,0.12); }
+.rec-head { width: 100%; display: flex; align-items: center; gap: 12px; padding: 14px 14px; background: none; border: none; text-align: left; font-family: inherit; cursor: pointer; color: inherit; }
+.rec-icon { width: 46px; height: 46px; border-radius: 14px; background: var(--lilac-pale); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+.rec-meta { flex: 1; min-width: 0; }
+.rec-name { font-size: 16px; font-weight: 800; color: var(--gray-900); line-height: 1.2; }
+.rec-tag { display: inline-block; margin-top: 4px; font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: 10px; }
+.tag-bebida { background: var(--mint-light); color: var(--mint); }
+.tag-plato { background: var(--lilac-light); color: var(--lilac-dark); }
+.tag-acomp { background: var(--pink-light); color: #B0004F; }
+.rec-arrow { font-size: 18px; color: var(--gray-500); transition: transform .25s; }
+.rec.open .rec-arrow { transform: rotate(180deg); color: var(--pink); }
+.rec-body { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+.rec.open .rec-body { max-height: 900px; }
+.rec-inner { padding: 0 16px 16px; }
+.rec-lead { font-size: 13.5px; color: var(--gray-500); margin-bottom: 12px; }
+.sub { font-size: 12px; font-weight: 800; color: var(--lilac-dark); margin: 12px 0 6px; letter-spacing: .02em; }
+.ing { list-style: none; }
+.ing li { font-size: 14px; padding: 6px 0 6px 22px; position: relative; border-bottom: 1px dashed var(--gray-200); color: var(--gray-700); }
+.ing li:last-child { border-bottom: none; }
+.ing li::before { content: ""; position: absolute; left: 4px; top: 13px; width: 8px; height: 8px; border-radius: 50%; background: var(--pink); }
+.steps { list-style: none; counter-reset: s; }
+.steps li { counter-increment: s; font-size: 14px; color: var(--gray-700); padding: 7px 0 7px 36px; position: relative; }
+.steps li::before { content: counter(s); position: absolute; left: 0; top: 7px; width: 24px; height: 24px; border-radius: 50%; background: var(--lilac); color: white; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+.tip { margin-top: 12px; background: var(--amber-light); border: 1px solid #F3DFB0; border-radius: 12px; padding: 10px 12px; font-size: 13px; color: var(--amber); display: flex; gap: 8px; }
+
+.libres { margin-top: 18px; background: var(--card); border: 1.5px solid var(--gray-200); border-radius: 18px; padding: 16px; }
+.libres h2 { font-size: 15px; font-weight: 800; color: var(--lilac-dark); }
+.libres p { font-size: 13px; color: var(--gray-500); margin: 2px 0 10px; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { background: var(--mint-light); color: var(--mint); font-size: 12.5px; font-weight: 700; padding: 4px 11px; border-radius: 14px; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-top">
+    <div>
+      <h1>🥒 Recetas con Vegetales</h1>
+      <p>Mipre · Karina Andrea Vargas Moreno · Plan Camilo Roa</p>
+    </div>
+    <a href="index.html" class="btn-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Volver
+    </a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="rule-box">
+    <span>💡</span>
+    <span>Los vegetales del grupo <strong>"Zero"</strong> son de libre consumo: dan saciedad, vitaminas, minerales y fibra. Úsalos <strong>dentro de tus comidas</strong>, no fuera de ellas. Las proteínas de cada receta son las que ya tienes en tu menú, con su misma cantidad.</span>
+  </div>
+
+  <div class="chips" role="tablist" aria-label="Filtrar recetas">
+    <button class="chip active" data-f="todas" onclick="filtrar('todas',this)">Todas</button>
+    <button class="chip" data-f="bebida" onclick="filtrar('bebida',this)">🥤 Bebidas</button>
+    <button class="chip" data-f="plato" onclick="filtrar('plato',this)">🍽️ Platos</button>
+    <button class="chip" data-f="acomp" onclick="filtrar('acomp',this)">🥗 Acompañantes</button>
+  </div>
+
+  <div id="lista"></div>
+
+  <section class="libres">
+    <h2>🥬 Vegetales de libre consumo (Zero)</h2>
+    <p>Todos estos los puedes usar en tus recetas sin pesarlos.</p>
+    <div class="pills">
+      <span class="pill">Acelgas</span><span class="pill">Alcachofa</span><span class="pill">Apio</span><span class="pill">Brócoli</span><span class="pill">Calabacín</span><span class="pill">Cebolla cabezona</span><span class="pill">Cebolla larga</span><span class="pill">Pepino cohombro</span><span class="pill">Coles</span><span class="pill">Coliflor</span><span class="pill">Champiñones</span><span class="pill">Chiles</span><span class="pill">Encurtidos</span><span class="pill">Espárragos</span><span class="pill">Espinacas</span><span class="pill">Lechuga</span><span class="pill">Palmito</span><span class="pill">Pepino relleno</span><span class="pill">Pimentón</span><span class="pill">Raíces chinas</span><span class="pill">Repollo</span><span class="pill">Tomate</span><span class="pill">Puerro</span>
+    </div>
+  </section>
+</main>
+
+<script>
+var RECETAS = [
+  { n: 'Jugo verde', i: '🥒', t: 'bebida',
+    lead: 'Va en tus comidas como bebida libre. Jamás con fruta.',
+    ing: ['Pepino sin semillas ni cáscara', 'Apio y espinaca (opcionales)', 'Hielo', 'Clight, Lightya o solo limón'],
+    pasos: ['Licúa los vegetales con hielo y el sabor que elijas. No lo cueles.', 'Prueba estas combinaciones: apio + pepino + espinaca con Clight de limonada o solo limón; apio y pepino con Lightya de granadilla; o solo pepino + hielo + Clight de piña, limonada, manzana verde o frutas tropicales.'],
+    tip: 'Si en tu comida quieres más saciedad, este jugo es una buena opción. Nunca le agregues fruta ni lo cueles.' },
+  { n: 'Cremas o sopas', i: '🍅', t: 'plato',
+    lead: 'Crema de tomate, y también de espinacas, brócoli, cebolla, champiñones o calabacín.',
+    ing: ['5 a 6 tomates maduros', 'Un poquito de cebolla', 'Sal y orégano', '1 cdita de mantequilla en spray Taeq', '1 cda de salsa de tomate Konfyt'],
+    pasos: ['Pon a hervir los tomates maduros.', 'Licúalos con la cebolla, la sal y el orégano.', 'Agrega la mantequilla en spray y la salsa de tomate Konfyt.'],
+    tip: 'Puedes asar tu proteína (pollo o carne) y ponerla dentro de la crema si no quieres comerla aparte.' },
+  { n: 'Salteados wok', i: '🍳', t: 'plato',
+    lead: 'Un plato rápido con muchos vegetales y tu proteína de la comida.',
+    ing: ['Pimentones de varios colores', 'Cebolla', 'Espinaca o tomate', 'Tu proteína ya cocinada, en la cantidad de esa comida: pollo desmechado o carne en tiras'],
+    pasos: ['Mezcla los pimentones con la cebolla y la espinaca o el tomate, y saltéalos.', 'Agrega la proteína previamente cocinada y mezcla bien.'],
+    tip: null },
+  { n: 'Ceviche', i: '🍋', t: 'plato',
+    lead: 'Fresco y con mucho sabor, ideal para el almuerzo.',
+    ing: ['Pico de gallo: tomate, cebolla, limón y cilantro', 'Tilapia, atún o camarones, en la cantidad de esa comida', 'Salsa de tomate Konfyt'],
+    pasos: ['Prepara el pico de gallo con el tomate, la cebolla, el limón y el cilantro.', 'Mézclalo con la proteína y agrega la salsa de tomate Konfyt.'],
+    tip: null },
+  { n: 'Burritos sin carbohidratos', i: '🌯', t: 'plato',
+    lead: 'Un burrito liviano usando hojas de arroz.',
+    ing: ['Hojas o papel de arroz (Vita integral)', 'Mezcla de vegetales y proteína, como en los woks o salteados'],
+    pasos: ['Ablanda la hoja de arroz con agua.', 'Rellénala con la mezcla de vegetales y proteína y enróllala.'],
+    tip: null },
+  { n: 'Pepinos agridulces', i: '🥗', t: 'acomp',
+    lead: 'Un acompañante que se prepara con un día de anticipación.',
+    ing: ['Pepinos cortados', '1 taza de vinagre blanco', '1 taza de agua', 'Canela', 'Endulzante al gusto'],
+    pasos: ['Pon a hervir el agua con el vinagre, la canela y el endulzante.', 'Apenas hierva, echa los pepinos cortados y apaga el fogón.', 'Déjalos reposar de un día para otro para que tomen el sabor.'],
+    tip: null },
+  { n: 'Cebollas caramelizadas', i: '🧅', t: 'acomp',
+    lead: 'Dulces sin azúcar, perfectas para acompañar tu proteína.',
+    ing: ['2 cebollas de huevo', '2 cditas de Incauca Zero, sucralosa o stevia por cada cebolla', 'Papel aluminio'],
+    pasos: ['Hazle una cruz con el cuchillo a cada cebolla.', 'Agrega 2 cditas de endulzante a cada una.', 'Envuélvelas en papel aluminio y llévalas al horno a fuego bajo durante 15 minutos.'],
+    tip: null },
+  { n: 'Arroz de coliflor', i: '🥦', t: 'acomp',
+    lead: 'Una guarnición de vegetales con textura de arroz.',
+    ing: ['Coliflor, sin el tallo', '1 cda de mantequilla en spray Taeq o sin calorías', 'Sal y pimienta', 'Hierbas o especias de tu gusto'],
+    pasos: ['Corta la coliflor en floretes y quita todo el tallo.', 'Tritúrala en un procesador, pulsando hasta que parezca arroz. Si no tienes, usa un rallador de mano.', 'Cocínala con la mantequilla en spray a fuego medio durante 2 minutos, mezclando de vez en cuando.', 'Baja el fuego, tapa y cocina 8 minutos.', 'Sazona con sal, pimienta y tus hierbas favoritas, y sírvela con tu comida.'],
+    tip: null },
+  { n: 'Tomates rellenos con champiñones', i: '🍄', t: 'plato',
+    lead: 'Se hornean en 10 minutos.',
+    ing: ['2 a 3 tomates riñón', 'Champiñones', 'Pimentones (opcional)', 'Mantequilla Taeq en spray', 'Orégano, laurel o tomillo', 'Sal y pimienta'],
+    pasos: ['Quita la "tapa" de los tomates y saca el contenido.', 'Saltea ese contenido en una sartén con la mantequilla en spray, junto con los champiñones y, si quieres, pimentones. Sazona con las especias, sal y pimienta.', 'Rellena los tomates con la mezcla.', 'Hornéalos a temperatura media durante 10 minutos.'],
+    tip: null }
+];
+var TAGS = { bebida: ['Bebida', 'tag-bebida'], plato: ['Plato', 'tag-plato'], acomp: ['Acompañante', 'tag-acomp'] };
+
+function render() {
+  var out = '';
+  RECETAS.forEach(function (r, k) {
+    out += '<div class="rec" data-t="' + r.t + '">' +
+      '<button class="rec-head" aria-expanded="false" onclick="abrir(this)">' +
+      '<div class="rec-icon">' + r.i + '</div>' +
+      '<div class="rec-meta"><div class="rec-name">' + r.n + '</div><span class="rec-tag ' + TAGS[r.t][1] + '">' + TAGS[r.t][0] + '</span></div>' +
+      '<div class="rec-arrow">▾</div></button>' +
+      '<div class="rec-body"><div class="rec-inner">' +
+      '<p class="rec-lead">' + r.lead + '</p>' +
+      '<div class="sub">INGREDIENTES</div><ul class="ing">' + r.ing.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>' +
+      '<div class="sub">PREPARACIÓN</div><ol class="steps">' + r.pasos.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ol>' +
+      (r.tip ? '<div class="tip"><span>💡</span><span>' + r.tip + '</span></div>' : '') +
+      '</div></div></div>';
+  });
+  document.getElementById('lista').innerHTML = out;
+  abrir(document.querySelector('.rec-head'));
+}
+
+function abrir(btn) {
+  var card = btn.parentNode;
+  var open = card.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+function filtrar(f, chip) {
+  document.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
+  chip.classList.add('active');
+  document.querySelectorAll('.rec').forEach(function (c) {
+    c.style.display = (f === 'todas' || c.getAttribute('data-t') === f) ? '' : 'none';
+  });
+}
+
+render();
+</script>
+</body>
+</html>
