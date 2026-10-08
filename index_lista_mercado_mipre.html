@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista de Mercado — Mipre</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root {
+--header: #7B57B5;
+--mint: #357A66;
+--mint-light: #CDEFE3;
+--mint-pale: #F0FAF6;
+--rose: #B8497A;
+--rose-light: #FBE3EE;
+--rose-pale: #FFF4F8;
+--amber: #9A6A1E;
+--amber-light: #F6DFA8;
+--amber-pale: #FFF8E8;
+--lilac: #6A47A6;
+--lilac-light: #E3D6F7;
+--lilac-pale: #F6F1FD;
+--gray-900: #2A2238;
+--gray-700: #4A3F5F;
+--gray-500: #6E6486;
+--gray-400: #9A91B0;
+--gray-300: #D8D0E8;
+--gray-200: #E8E1F4;
+--gray-100: #F4F0FA;
+--white: #FFFFFF;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+font-family: 'Nunito', sans-serif;
+background: #FBF8FF;
+color: var(--gray-900);
+min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.app-header {
+background: var(--header);
+padding: 20px 20px 16px;
+color: white;
+position: relative;
+z-index: 100;
+box-shadow: 0 2px 12px rgba(123,87,181,0.25);
+}
+.header-top {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 10px;
+gap: 8px;
+}
+.app-header h1 {
+font-family: 'DM Serif Display', serif;
+font-size: 20px;
+font-weight: 400;
+letter-spacing: -0.3px;
+line-height: 1.2;
+}
+.app-header p { font-size: 12px; opacity: 0.75; margin-top: 2px; }
+
+.progress-bar-wrap {
+margin-top: 12px;
+background: rgba(255,255,255,0.2);
+border-radius: 99px;
+height: 5px;
+overflow: hidden;
+}
+.progress-bar-fill {
+height: 100%;
+background: #CDEFE3;
+border-radius: 99px;
+transition: width 0.4s ease;
+width: 0%;
+}
+.progress-label {
+font-size: 11px;
+opacity: 0.8;
+margin-top: 5px;
+display: flex;
+justify-content: space-between;
+}
+
+/* ── BACK BUTTON ── */
+.btn-back {
+display: inline-flex;
+align-items: center;
+gap: 5px;
+color: rgba(255,255,255,0.9);
+text-decoration: none;
+font-size: 12px;
+font-weight: 500;
+padding: 5px 10px;
+border-radius: 8px;
+background: rgba(255,255,255,0.15);
+transition: background 0.2s;
+white-space: nowrap;
+flex-shrink: 0;
+}
+.btn-back:hover { background: rgba(255,255,255,0.25); }
+
+/* ── CATEGORY GRID NAV ── */
+.cat-nav {
+background: white;
+border-bottom: 1.5px solid var(--gray-200);
+padding: 12px 16px;
+position: sticky;
+top: 0;
+z-index: 99;
+}
+
+.cat-grid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 8px;
+}
+
+.cat-btn {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 4px;
+padding: 10px 6px 8px;
+border: 1.5px solid var(--gray-200);
+border-radius: 14px;
+background: var(--gray-100);
+cursor: pointer;
+transition: all 0.18s;
+font-family: 'Nunito', sans-serif;
+color: var(--gray-500);
+-webkit-tap-highlight-color: transparent;
+position: relative;
+}
+.cat-btn:active { transform: scale(0.96); }
+
+.cat-emoji { font-size: 22px; line-height: 1; }
+.cat-label { font-size: 10px; font-weight: 600; text-align: center; letter-spacing: 0.01em; line-height: 1.2; }
+.cat-badge {
+position: absolute;
+top: 6px;
+right: 6px;
+min-width: 18px;
+height: 18px;
+border-radius: 99px;
+font-size: 10px;
+font-weight: 700;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 0 4px;
+background: var(--gray-300);
+color: var(--gray-700);
+transition: all 0.2s;
+}
+
+/* Active states per category */
+.cat-btn[data-cat="verduras"].active {
+background: var(--mint-pale);
+border-color: var(--mint);
+color: var(--mint);
+}
+.cat-btn[data-cat="verduras"].active .cat-badge { background: var(--mint); color: white; }
+
+.cat-btn[data-cat="carnes"].active {
+background: var(--rose-pale);
+border-color: var(--rose);
+color: var(--rose);
+}
+.cat-btn[data-cat="carnes"].active .cat-badge { background: var(--rose); color: white; }
+
+.cat-btn[data-cat="super"].active {
+background: var(--amber-pale);
+border-color: var(--amber);
+color: var(--amber);
+}
+.cat-btn[data-cat="super"].active .cat-badge { background: var(--amber); color: white; }
+
+.cat-btn[data-cat="suplementos"].active {
+background: var(--lilac-pale);
+border-color: var(--lilac);
+color: var(--lilac);
+}
+.cat-btn[data-cat="suplementos"].active .cat-badge { background: var(--lilac); color: white; }
+
+/* done badge override */
+.cat-btn .cat-badge.done { background: var(--mint) !important; color: white !important; }
+
+/* ── MAIN ── */
+.main { padding: 16px 16px 100px; max-width: 680px; margin: 0 auto; }
+
+/* ── SECTION PANELS ── */
+.section-panel { display: none; }
+.section-panel.active { display: block; }
+
+/* ── SECTION INTRO ── */
+.section-intro {
+border-radius: 14px;
+padding: 13px 15px;
+margin-bottom: 14px;
+display: flex;
+align-items: center;
+gap: 12px;
+font-size: 13px;
+}
+.section-intro .icon { font-size: 24px; flex-shrink: 0; }
+.section-intro strong { font-size: 14px; display: block; margin-bottom: 2px; }
+
+/* ── SUBSECTIONS ── */
+.subsection { margin-bottom: 18px; }
+.subsection-label {
+font-size: 11px;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 0.07em;
+color: var(--gray-500);
+padding: 0 4px 8px;
+}
+
+/* ── ITEM CARD ── */
+.item-card {
+background: white;
+border-radius: 12px;
+border: 1.5px solid var(--gray-100);
+margin-bottom: 7px;
+overflow: hidden;
+transition: border-color 0.2s, transform 0.1s;
+cursor: pointer;
+-webkit-tap-highlight-color: transparent;
+}
+.item-card:hover { border-color: var(--gray-300); }
+.item-card:active { transform: scale(0.99); }
+.item-card.checked { background: var(--gray-100); border-color: var(--gray-200); }
+
+.item-inner {
+display: flex;
+align-items: center;
+padding: 12px 13px;
+gap: 11px;
+user-select: none;
+}
+.item-check {
+width: 22px; height: 22px;
+border-radius: 6px;
+border: 2px solid var(--gray-300);
+flex-shrink: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: all 0.2s;
+background: white;
+}
+.item-card.checked .item-check {
+background: var(--mint);
+border-color: var(--mint);
+}
+.item-check svg { display: none; }
+.item-card.checked .item-check svg { display: block; }
+
+.item-text { flex: 1; min-width: 0; }
+.item-name {
+font-size: 14px;
+font-weight: 500;
+color: var(--gray-900);
+transition: color 0.2s;
+line-height: 1.3;
+}
+.item-card.checked .item-name {
+color: var(--gray-500);
+text-decoration: line-through;
+text-decoration-color: var(--gray-400);
+}
+.item-note {
+font-size: 12px;
+color: var(--gray-500);
+margin-top: 2px;
+line-height: 1.3;
+}
+.item-qty {
+font-size: 12px;
+font-weight: 500;
+color: var(--gray-500);
+background: var(--gray-100);
+padding: 3px 9px;
+border-radius: 99px;
+white-space: nowrap;
+flex-shrink: 0;
+}
+.item-card.checked .item-qty { opacity: 0.5; }
+
+/* ── ALERT ── */
+.alert {
+background: #FFF9E6;
+border: 1.5px solid #FDE68A;
+border-radius: 12px;
+padding: 12px 14px;
+font-size: 13px;
+color: #92400E;
+margin-bottom: 16px;
+display: flex;
+gap: 8px;
+align-items: flex-start;
+}
+.alert span:first-child { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── FAB ── */
+.fab {
+position: fixed;
+bottom: 24px;
+right: 18px;
+background: var(--header);
+color: white;
+border: none;
+border-radius: 99px;
+padding: 13px 20px;
+font-family: 'Nunito', sans-serif;
+font-size: 14px;
+font-weight: 500;
+cursor: pointer;
+box-shadow: 0 4px 20px rgba(123,87,181,0.35);
+display: flex;
+align-items: center;
+gap: 8px;
+transition: transform 0.15s, box-shadow 0.15s;
+z-index: 200;
+-webkit-tap-highlight-color: transparent;
+}
+.fab:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(123,87,181,0.45); }
+.fab:active { transform: scale(0.97); }
+
+/* ── RESPONSIVE: TABLET ── */
+@media (min-width: 560px) {
+.app-header { padding: 24px 28px 18px; }
+.app-header h1 { font-size: 22px; }
+.cat-nav { padding: 14px 24px; }
+.cat-grid { gap: 10px; }
+.cat-btn { padding: 12px 8px 10px; border-radius: 16px; }
+.cat-emoji { font-size: 26px; }
+.cat-label { font-size: 11px; }
+.main { padding: 20px 24px 100px; }
+.item-name { font-size: 15px; }
+}
+
+/* ── RESPONSIVE: DESKTOP ── */
+@media (min-width: 768px) {
+.app-header { padding: 24px 32px 18px; }
+.cat-nav { padding: 14px 32px; }
+.cat-grid {
+grid-template-columns: repeat(4, 1fr);
+max-width: 520px;
+gap: 12px;
+}
+.cat-btn { padding: 14px 10px 12px; border-radius: 18px; }
+.cat-emoji { font-size: 28px; }
+.cat-label { font-size: 12px; }
+.main { padding: 24px 32px 100px; }
+.item-inner { padding: 14px 16px; }
+.item-name { font-size: 15px; }
+}
+
+/* ── VERY SMALL (≤360px) ── */
+@media (max-width: 360px) {
+.cat-grid { gap: 6px; }
+.cat-btn { padding: 8px 4px 6px; border-radius: 12px; }
+.cat-emoji { font-size: 20px; }
+.cat-label { font-size: 9px; }
+.cat-badge { top: 4px; right: 4px; width: 16px; height: 16px; font-size: 9px; }
+.app-header h1 { font-size: 17px; }
+.item-name { font-size: 13px; }
+.item-qty { display: none; }
+}
+
+/* ── PRINT ── */
+@media print {
+.cat-nav, .fab, .app-header { display: none; }
+.section-panel { display: block !important; }
+.main { padding: 16px; }
+.item-card { break-inside: avoid; }
+.btn-back { display: none !important; }
+}
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+.item-card, .cat-btn, .fab { transition: none; }
+.progress-bar-fill { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+<div class="header-top">
+<div>
+<h1>🛒 Lista de Mercado Semanal</h1>
+<p>Mipre · Karina Andrea Vargas Moreno · Plan Camilo Roa</p>
+</div>
+<a href="index.html" class="btn-back">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<line x1="19" y1="12" x2="5" y2="12"></line>
+<polyline points="12 19 5 12 12 5"></polyline>
+</svg>
+Volver
+</a>
+</div>
+<div class="progress-bar-wrap">
+<div class="progress-bar-fill" id="progressBar"></div>
+</div>
+<div class="progress-label">
+<span id="progressText">0 de 69 ítems marcados</span>
+<span id="progressPct">0%</span>
+</div>
+</header>
+
+<!-- CATEGORY GRID NAV -->
+<nav class="cat-nav">
+<div class="cat-grid">
+<button class="cat-btn active" data-cat="verduras" onclick="showTab('verduras')" id="tab-verduras">
+<span class="cat-emoji">🥦</span>
+<span class="cat-label">Verduras</span>
+<span class="cat-badge" id="cnt-verduras">21</span>
+</button>
+<button class="cat-btn" data-cat="carnes" onclick="showTab('carnes')" id="tab-carnes">
+<span class="cat-emoji">🥩</span>
+<span class="cat-label">Carnes</span>
+<span class="cat-badge" id="cnt-carnes">10</span>
+</button>
+<button class="cat-btn" data-cat="super" onclick="showTab('super')" id="tab-super">
+<span class="cat-emoji">🛒</span>
+<span class="cat-label">Súper</span>
+<span class="cat-badge" id="cnt-super">33</span>
+</button>
+<button class="cat-btn" data-cat="suplementos" onclick="showTab('suplementos')" id="tab-suplementos">
+<span class="cat-emoji">💊</span>
+<span class="cat-label">Suplemen.</span>
+<span class="cat-badge" id="cnt-suplementos">5</span>
+</button>
+</div>
+</nav>
+
+<main class="main">
+
+<!-- VERDURAS -->
+<div class="section-panel active" id="panel-verduras">
+<div class="section-intro" style="background:#F0FAF6;">
+<span class="icon">🥦</span>
+<div>
+<strong style="color:#357A66">Verduras y frutas</strong>
+Consumo libre de vegetales "zero". Las frutas se pesan: <strong>100 g</strong> en la media mañana.
+</div>
+</div>
+
+<div class="subsection">
+<div class="subsection-label">Vegetales de libre consumo</div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Pepino cohombro</div><div class="item-note">Jugos verdes sin fruta y ensaladas</div></div><div class="item-qty">bastante</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Apio</div><div class="item-note">Jugos verdes y cremas</div></div><div class="item-qty">bastante</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Espinaca</div><div class="item-note">Jugos verdes, salteados wok y cremas</div></div><div class="item-qty">bastante</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Lechuga</div><div class="item-note">Ensaladas del almuerzo y la comida</div></div><div class="item-qty">bastante</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Tomate</div><div class="item-note">Ensaladas, omelette (martes) y cremas</div></div><div class="item-qty">bastante</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Cebolla</div><div class="item-note">Omelette, pico de gallo y salteados</div></div><div class="item-qty">bastante</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Pimentón</div><div class="item-note">Salteados wok y ensaladas</div></div><div class="item-qty">bastante</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Brócoli</div><div class="item-note">Cremas y sopas de vegetales</div></div><div class="item-qty">1–2 und.</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Coliflor</div><div class="item-note">Para hacer arroz de coliflor</div></div><div class="item-qty">1 und.</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Champiñones</div><div class="item-note">Salteados y tomates rellenos</div></div><div class="item-qty">~200 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Calabacín</div><div class="item-note">Cremas y sopas de vegetales</div></div><div class="item-qty">1–2 und.</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Cilantro</div><div class="item-note">Pico de gallo y ceviche</div></div><div class="item-qty">1 atado</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Limón</div><div class="item-note">Limonadas sin azúcar, jugos verdes y ceviche</div></div><div class="item-qty">~10 und.</div></div></div>
+</div>
+
+<div class="subsection">
+<div class="subsection-label">Frutas (pesar <strong>100 g</strong> por porción — media mañana)</div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Sandía</div><div class="item-note">Lunes — media mañana (100 g)</div></div><div class="item-qty">100 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Manzana</div><div class="item-note">Martes — media mañana (100 g)</div></div><div class="item-qty">100 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Piña</div><div class="item-note">Miércoles y domingo — media mañana (100 g)</div></div><div class="item-qty">200 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Banano</div><div class="item-note">Miércoles — opción en lugar de la piña (100 g)</div></div><div class="item-qty">100 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Melón</div><div class="item-note">Jueves — media mañana (100 g)</div></div><div class="item-qty">100 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Pera</div><div class="item-note">Viernes — media mañana (100 g)</div></div><div class="item-qty">100 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Papaya o granadilla</div><div class="item-note">Sábado — media mañana (100 g)</div></div><div class="item-qty">100 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Fruta de tu elección</div><div class="item-note">Post-entreno de tren inferior (50 g) — 3 días a la semana</div></div><div class="item-qty">3 × 50 g</div></div></div>
+</div>
+</div>
+
+<!-- CARNES -->
+<div class="section-panel" id="panel-carnes">
+<div class="section-intro" style="background:#FFF4F8;">
+<span class="icon">🥩</span>
+<div>
+<strong style="color:#B8497A">Carnes y proteínas</strong>
+Pesar siempre en crudo y descongelado: <strong>120 g</strong> por porción. Preferir cortes magros sin grasa visible.
+</div>
+</div>
+
+<div class="subsection">
+<div class="subsection-label">Carnes y pescados</div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Pechuga de pollo</div><div class="item-note">Martes y sábado (almuerzo); lunes, jueves y domingo (comida) — sin piel</div></div><div class="item-qty">~700 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Carne de res magra</div><div class="item-note">Lunes y viernes — almuerzo</div></div><div class="item-qty">~250 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Solomo</div><div class="item-note">Miércoles (almuerzo) y sábado (comida)</div></div><div class="item-qty">~250 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Cañón (lomo de cerdo magro)</div><div class="item-note">Jueves y viernes — almuerzo (opción)</div></div><div class="item-qty">~250 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Salmón</div><div class="item-note">Lunes — almuerzo (opción a la carne de res)</div></div><div class="item-qty">~120 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Corvina</div><div class="item-note">Martes, miércoles y domingo — almuerzo (opción)</div></div><div class="item-qty">~120–360 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Tilapia</div><div class="item-note">Domingo — almuerzo (opción a la corvina)</div></div><div class="item-qty">~120 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Atún en agua</div><div class="item-note">Martes — algo (opción a la copa de proteína)</div></div><div class="item-qty">1 lata</div></div></div>
+</div>
+
+<div class="subsection">
+<div class="subsection-label">Huevos y embutidos</div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Huevos</div><div class="item-note">Desayunos, pancake del sábado y omelette del martes (3 huevos)</div></div><div class="item-qty">~14 und.</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Jamón o pechuga de pollo/pavo bajo en grasa</div><div class="item-note">Sánduche del martes (60 g) y algo del jueves (30 g)</div></div><div class="item-qty">~100 g</div></div></div>
+</div>
+</div>
+
+<!-- SUPERMERCADO -->
+<div class="section-panel" id="panel-super">
+<div class="section-intro" style="background:#FFF8E8;">
+<span class="icon">🛒</span>
+<div>
+<strong style="color:#9A6A1E">Supermercado</strong>
+Lácteos, carbohidratos, grasas, bebidas y despensa general.
+</div>
+</div>
+
+<div class="alert"><span>⚠️</span><span><strong>Recuerda:</strong> NO leche de ningún tipo (solo la de almendras de 25–30 cal). Solo yogurt griego Zorba natural o Taeq natural. Cero azúcar en todo.</span></div>
+
+<div class="subsection">
+<div class="subsection-label">Lácteos y refrigerados</div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Yogurt griego Zorba natural o Taeq natural</div><div class="item-note">Solo natural, máx 4 g de azúcar — desayunos y algo</div></div><div class="item-qty">~450 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Queso blanco fresco / queso pera bajo en grasa</div><div class="item-note">Desayunos (30–40 g) y algo del miércoles y domingo</div></div><div class="item-qty">~250 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Cuajada o quesito</div><div class="item-note">Comida del miércoles y viernes (100 g cuajada u 80 g quesito)</div></div><div class="item-qty">~200 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Barra de queso Finesse</div><div class="item-note">Algo del domingo — opción al queso blanco (40 g)</div></div><div class="item-qty">1 und.</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Leche de almendras (25–30 cal)</div><div class="item-note">Café, cocoa, avena, cereal y merienda</div></div><div class="item-qty">3 cajas</div></div></div>
+</div>
+
+<div class="subsection">
+<div class="subsection-label">Carbohidratos naturales</div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Arepa de arroz (La Mary) o Sary extradelgada</div><div class="item-note">Desayuno lunes, miércoles y domingo</div></div><div class="item-qty">1 paquete</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Arepa extradelgada La Típica</div><div class="item-note">Comida miércoles y viernes — máx 100 cal por arepa</div></div><div class="item-qty">1 paquete</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Avena en hojuelas</div><div class="item-note">Algo 2 (30 g) y pancake del sábado (40 g)</div></div><div class="item-qty">500 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Copos de avena Sin Remordimiento</div><div class="item-note">Algo 2 miércoles y sábado (20 g)</div></div><div class="item-qty">1 paquete</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Cereal sin azúcar / quinua pops</div><div class="item-note">Desayuno jueves (40 g)</div></div><div class="item-qty">1 paquete</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Pan trenza de arroz / Dushi / Natiff / pan de arroz</div><div class="item-note">Desayuno martes y viernes (60 g)</div></div><div class="item-qty">1 paquete</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Tostadas de arroz soplado Susanita</div><div class="item-note">Merienda (2 tostadas) y almuerzo del sábado</div></div><div class="item-qty">1 paquete</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Galletas de maíz horneado Salmas o Sanissimas</div><div class="item-note">Algo 2 martes y viernes (1 paquete)</div></div><div class="item-qty">2 paquetes</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Granola Whynot</div><div class="item-note">Merienda martes, jueves y sábado (20 g)</div></div><div class="item-qty">1 bolsa</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Arroz blanco</div><div class="item-note">Almuerzo viernes y domingo — 50 g cocinado</div></div><div class="item-qty">500 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Papas</div><div class="item-note">Almuerzo miércoles (50 g) y sábado (60 g) — cocinadas o air fryer</div></div><div class="item-qty">~300 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Plátano maduro</div><div class="item-note">Almuerzo lunes, martes y jueves — 50 g</div></div><div class="item-qty">2 und.</div></div></div>
+</div>
+
+<div class="subsection">
+<div class="subsection-label">Barras y snacks permitidos</div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Barra ONE</div><div class="item-note">Algo miércoles (1 barra) o jueves (½) — máx 2 veces por semana</div></div><div class="item-qty">1–2 und.</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Barra de proteína</div><div class="item-note">Algo del sábado — ½ barra</div></div><div class="item-qty">1 und.</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Brownie Sin Remordimiento</div><div class="item-note">Algo del sábado (opción) — solo 1 vez a la semana</div></div><div class="item-qty">1 und.</div></div></div>
+</div>
+
+<div class="subsection">
+<div class="subsection-label">Grasas saludables</div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Aguacate</div><div class="item-note">Almuerzo y comida — 40 g por porción</div></div><div class="item-qty">3–4 und.</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Almendras</div><div class="item-note">Media mañana y algo — 20 g por porción</div></div><div class="item-qty">~150 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Maní sin sal</div><div class="item-note">Media mañana y algo — 20–30 g por porción</div></div><div class="item-qty">~100 g</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Mantequilla de maní Taeq o FitNut</div><div class="item-note">Sin azúcar añadida — 20 g por porción</div></div><div class="item-qty">1 frasco grande</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Mantequilla de almendras</div><div class="item-note">Merienda — 10 g por porción</div></div><div class="item-qty">1 frasco</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Aceite en aerosol Gourmet Control o PAM</div><div class="item-note">Para cocinar — usar lo mínimo siempre</div></div><div class="item-qty">1 und.</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Aceite de oliva</div><div class="item-note">1 cucharada para el almuerzo del miércoles, viernes y domingo</div></div><div class="item-qty">1 botella</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Mantequilla en spray Taeq o Alma</div><div class="item-note">Nunca mantequilla tradicional ni ghee</div></div><div class="item-qty">1 und.</div></div></div>
+</div>
+
+<div class="subsection">
+<div class="subsection-label">Bebidas y endulzantes</div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Clight / Lightya</div><div class="item-note">Para jugos verdes y bebidas — varios sabores</div></div><div class="item-qty">varios sobres</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">H2oh / gaseosa Zero o light</div><div class="item-note">Hatsu solo amarillo o lila. JAMÁS gaseosa normal.</div></div><div class="item-qty">al gusto</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Gelatina light (Konfyt / Roya light / Gelada light)</div><div class="item-note">Solo las listas para consumir. No Finesse.</div></div><div class="item-qty">varias</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Incauca Zero o Riopaila Senza</div><div class="item-note">NO Incauca Light ni Manuelita Light</div></div><div class="item-qty">1 paquete</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Cocoa sin azúcar / café / aromáticas</div><div class="item-note">Para las bebidas calientes del desayuno</div></div><div class="item-qty">1 caja c/u</div></div></div>
+</div>
+</div>
+
+<!-- SUPLEMENTOS -->
+<div class="section-panel" id="panel-suplementos">
+<div class="section-intro" style="background:#F6F1FD;">
+<span class="icon">💊</span>
+<div>
+<strong style="color:#6A47A6">Suplementos</strong>
+Según indicaciones del nutricionista. No cambiar marcas ni dosis.
+</div>
+</div>
+
+<div class="subsection">
+<div class="subsection-label">Suplementos diarios</div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Proteína en polvo Protizyme de Metabolic o Isolate de Basic (ISO100)</div><div class="item-note">Disuelta en agua en el algo, siempre con frutos secos. Post-entreno de tren inferior: 1 copa con la siguiente comida.</div></div><div class="item-qty">1 tarro</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Creatina monohidrato de Metabolic</div><div class="item-note">5 g en medio vaso de agua, todos los días después del desayuno</div></div><div class="item-qty">1 tarro</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Berberina 500 mg</div><div class="item-note">1 diaria antes de entrenar</div></div><div class="item-qty">1 frasco</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Insulean (picolinato de cromo)</div><div class="item-note">2 cápsulas al día: 1 antes del desayuno y 1 antes del almuerzo</div></div><div class="item-qty">1 frasco</div></div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-inner"><div class="item-check"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="item-text"><div class="item-name">Fibra AveeFib</div><div class="item-note">5 g (1 cdita) en 1 vaso de agua, 1 vez al día en ayunas o antes de dormir — 📱 +573245336060</div></div><div class="item-qty">1 tarro</div></div></div>
+</div>
+
+<div style="background:#F6F1FD;border-radius:12px;padding:14px 16px;margin-top:8px;">
+<p style="font-size:13px;font-weight:700;color:#6A47A6;margin-bottom:6px;">📦 Proveedor recomendado</p>
+<p style="font-size:13px;color:#4A3F5F;">Nutri Gym Shop — domicilio nacional<br><strong>📱 3004635051</strong></p>
+</div>
+</div>
+
+</main>
+
+<button class="fab" onclick="clearAll()">
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M5.333 4V2.667a1.333 1.333 0 011.334-1.334h2.666a1.333 1.333 0 011.334 1.334V4M6.667 7.333v4M9.333 7.333v4M3.333 4l.667 9.333A1.333 1.333 0 005.333 14.667h5.334a1.333 1.333 0 001.334-1.334L12.667 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+Limpiar marcados
+</button>
+
+<script>
+const TOTAL = document.querySelectorAll('.item-card').length;
+const CATS = ['verduras','carnes','super','suplementos'];
+
+function toggle(card) {
+card.classList.toggle('checked');
+updateProgress();
+saveState();
+}
+
+function updateProgress() {
+var checked = document.querySelectorAll('.item-card.checked').length;
+var pct = Math.round((checked / TOTAL) * 100);
+document.getElementById('progressBar').style.width = pct + '%';
+document.getElementById('progressText').textContent = checked + ' de ' + TOTAL + ' ítems marcados';
+document.getElementById('progressPct').textContent = pct + '%';
+
+CATS.forEach(function(id) {
+var panel = document.getElementById('panel-' + id);
+var total = panel.querySelectorAll('.item-card').length;
+var done = panel.querySelectorAll('.item-card.checked').length;
+var badge = document.getElementById('cnt-' + id);
+if (done === total && total > 0) {
+badge.textContent = '✓';
+badge.classList.add('done');
+} else {
+badge.textContent = (total - done);
+badge.classList.remove('done');
+}
+});
+}
+
+function clearAll() {
+document.getElementById('confirmDialog').style.display = 'flex';
+}
+
+function confirmClear(yes) {
+document.getElementById('confirmDialog').style.display = 'none';
+if (!yes) return;
+document.querySelectorAll('.item-card.checked').forEach(function(c) { c.classList.remove('checked'); });
+updateProgress();
+saveState();
+}
+
+function showTab(id) {
+document.querySelectorAll('.section-panel').forEach(function(p) { p.classList.remove('active'); });
+document.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('active'); });
+document.getElementById('panel-' + id).classList.add('active');
+document.getElementById('tab-' + id).classList.add('active');
+document.querySelector('.main').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function saveState() {
+var state = [];
+document.querySelectorAll('.item-card').forEach(function(c) {
+state.push(c.classList.contains('checked') ? 1 : 0);
+});
+try { localStorage.setItem('mercado_mipre', JSON.stringify(state)); } catch(e) {}
+}
+
+function loadState() {
+try {
+var raw = localStorage.getItem('mercado_mipre');
+if (!raw) return;
+var state = JSON.parse(raw);
+document.querySelectorAll('.item-card').forEach(function(c, i) {
+if (state[i]) c.classList.add('checked');
+});
+updateProgress();
+} catch(e) {}
+}
+
+loadState();
+</script>
+
+<!-- Confirm dialog -->
+<div id="confirmDialog" style="display:none;position:fixed;inset:0;background:rgba(42,34,56,0.45);z-index:999;align-items:center;justify-content:center;padding:24px;">
+<div style="background:white;border-radius:20px;padding:24px 22px;max-width:320px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+<div style="font-size:22px;text-align:center;margin-bottom:10px;">🗑️</div>
+<div style="font-size:16px;font-weight:800;color:#2A2238;text-align:center;margin-bottom:6px;">¿Limpiar lista?</div>
+<div style="font-size:13px;color:#6E6486;text-align:center;margin-bottom:20px;line-height:1.5;">Se quitarán todas las marcas. Esta acción no se puede deshacer.</div>
+<div style="display:flex;gap:10px;">
+<button onclick="confirmClear(false)" style="flex:1;padding:12px;border-radius:12px;border:1.5px solid #D8D0E8;background:white;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:#4A3F5F;cursor:pointer;">Cancelar</button>
+<button onclick="confirmClear(true)" style="flex:1;padding:12px;border-radius:12px;border:none;background:#7B57B5;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:white;cursor:pointer;">Sí, limpiar</button>
+</div>
+</div>
+</div>
+
+</body>
+</html>
