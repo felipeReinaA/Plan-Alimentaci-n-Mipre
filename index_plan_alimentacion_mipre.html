@@ -520,6 +520,20 @@ display: flex; align-items: center; gap: 6px;
 /* Opciones de algo */
 .or-note { font-size: 11.5px; color: var(--gray-500); text-align: center; padding: 6px 0 2px; font-style: italic; }
 .day-nav .day-btn.active { box-shadow: inset 0 -2.5px 0 #D6006B; }
+
+/* ─── Complementos ─── */
+.supp-block { margin: 8px 0; padding: 10px 12px; background: var(--green-pale); border: 1.5px dashed #C9B2F0; border-radius: 12px; }
+.supp-label { font-size: 11px; font-weight: 800; color: var(--green); letter-spacing: .04em; margin-bottom: 4px; }
+.supp-item { display: flex; align-items: flex-start; gap: 10px; width: 100%; padding: 7px 0; background: none; border: none; font-family: inherit; text-align: left; cursor: pointer; font-size: 13.5px; color: var(--gray-700); line-height: 1.4; }
+.supp-item:focus-visible { outline: 3px solid #D6006B; outline-offset: 2px; border-radius: 8px; }
+.supp-box { width: 22px; height: 22px; border-radius: 7px; border: 2px solid #C9B2F0; background: #fff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all .15s; }
+.supp-box svg { opacity: 0; transition: opacity .15s; }
+.supp-item.checked .supp-box { background: #D6006B; border-color: #D6006B; }
+.supp-item.checked .supp-box svg { opacity: 1; }
+.supp-item.checked .supp-text { opacity: .5; }
+.supp-note { display: block; font-size: 11.5px; color: var(--gray-500); margin-top: 2px; }
+.supp-count { font-size: 11px; font-weight: 800; background: var(--green-pale); color: var(--green); border: 1px solid #D6C6F2; padding: 3px 9px; border-radius: 10px; margin-right: 6px; white-space: nowrap; }
+.supp-count.complete { background: #D6006B; border-color: #D6006B; color: #fff; }
 </style>
 </head>
 <body>
@@ -586,12 +600,20 @@ Volver
 <div class="meal-header" onclick="toggleMeal(this)">
 <div class="meal-icon icon-desayuno">🍳</div>
 <div class="meal-meta"><div class="meal-name">Desayuno</div><div class="meal-tag">1 Azúcar · Proteína · Grasa · Bebida libre</div></div>
+<span class="supp-count" data-total="3">💊 0/3</span>
 <div class="meal-arrow">▾</div>
 </div>
 <div class="meal-body">
+<div class="supp-block"><div class="supp-label">💊 ANTES DEL DESAYUNO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="0-ins1" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Insulean</strong> · 1 cápsula</span></button>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="0-fib" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Fibra AveeFib</strong> · 5 g (1 cdita) disuelta en 1 vaso de agua + 1 vaso de agua adicional<small class="supp-note">Puedes tomarla también la noche anterior, antes de dormir.</small></span></button>
+</div>
 <div class="food-item" id="fi-1" data-group="dot-carb" data-original="Arepa de arroz (La Mary) o Sary extradelgada" data-original-qty="1 und"><div class="food-dot dot-carb"></div><div class="food-text">Arepa de arroz (La Mary) <em>o</em> Sary extradelgada</div><div class="food-qty">1 und</div><button class="swap-btn" onclick="openSwap(event,1)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,1)">deshacer</span></div>
 <div class="food-item" id="fi-2" data-group="dot-prot" data-original="2 huevos enteros + 30 g queso blanco fresco" data-original-qty="2 + 30 g"><div class="food-dot dot-prot"></div><div class="food-text">2 huevos enteros + 30 g queso blanco fresco</div><div class="food-qty">2 + 30 g</div><button class="swap-btn" onclick="openSwap(event,2)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,2)">deshacer</span></div>
 <div class="food-item" id="fi-3" data-group="dot-beb" data-original="Café en leche de almendras" data-original-qty="30 cal"><div class="food-dot dot-beb"></div><div class="food-text">Café en leche de almendras</div><div class="food-qty">30 cal</div><button class="swap-btn" onclick="openSwap(event,3)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,3)">deshacer</span></div>
+<div class="supp-block"><div class="supp-label">💊 DESPUÉS DEL DESAYUNO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="0-crea" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Creatina monohidrato</strong> · 5 g en medio vaso de agua</span></button>
+</div>
 <div class="tag-row"><span class="tag" style="background:#FFE0EF;color:#B0004F">🌾 Carbohidrato</span><span class="tag" style="background:#E3D6F7;color:#4B2F85">🥚 Proteína</span></div>
 </div>
 </div>
@@ -611,9 +633,13 @@ Volver
 <div class="meal-header" onclick="toggleMeal(this)">
 <div class="meal-icon icon-almuerzo">🥩</div>
 <div class="meal-meta"><div class="meal-name">Almuerzo</div><div class="meal-tag">1 Azúcar · Proteína · Grasa · Vegetales · Bebida libre</div></div>
+<span class="supp-count" data-total="1">💊 0/1</span>
 <div class="meal-arrow">▾</div>
 </div>
 <div class="meal-body">
+<div class="supp-block"><div class="supp-label">💊 ANTES DEL ALMUERZO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="0-ins2" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Insulean</strong> · 1 cápsula</span></button>
+</div>
 <div class="food-item" id="fi-7" data-group="dot-carb" data-original="Plátano maduro" data-original-qty="50 g"><div class="food-dot dot-carb"></div><div class="food-text">Plátano maduro</div><div class="food-qty">50 g</div><button class="swap-btn" onclick="openSwap(event,7)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,7)">deshacer</span></div>
 <div class="food-item" id="fi-8" data-group="dot-prot" data-original="Carne de res magra o salmón" data-original-qty="120 g"><div class="food-dot dot-prot"></div><div class="food-text">Carne de res magra <em>o</em> salmón</div><div class="food-qty">120 g</div><button class="swap-btn" onclick="openSwap(event,8)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,8)">deshacer</span></div>
 <div class="food-item" id="fi-9" data-group="dot-veg" data-original="Ensalada de vegetales" data-original-qty="libre"><div class="food-dot dot-veg"></div><div class="food-text">Ensalada de vegetales</div><div class="food-qty">libre</div><button class="swap-btn" onclick="openSwap(event,9)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,9)">deshacer</span></div>
@@ -679,12 +705,20 @@ Volver
 <div class="meal-header" onclick="toggleMeal(this)">
 <div class="meal-icon icon-desayuno">🥪</div>
 <div class="meal-meta"><div class="meal-name">Desayuno — Sánduche</div><div class="meal-tag">1 Azúcar · Proteína · Grasa · Bebida libre</div></div>
+<span class="supp-count" data-total="3">💊 0/3</span>
 <div class="meal-arrow">▾</div>
 </div>
 <div class="meal-body">
+<div class="supp-block"><div class="supp-label">💊 ANTES DEL DESAYUNO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="1-ins1" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Insulean</strong> · 1 cápsula</span></button>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="1-fib" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Fibra AveeFib</strong> · 5 g (1 cdita) disuelta en 1 vaso de agua + 1 vaso de agua adicional<small class="supp-note">Puedes tomarla también la noche anterior, antes de dormir.</small></span></button>
+</div>
 <div class="food-item" id="fi-23" data-group="dot-carb" data-original="Pan trenza de arroz o Dushi o Natiff" data-original-qty="60 g"><div class="food-dot dot-carb"></div><div class="food-text">Pan trenza de arroz <em>o</em> Dushi <em>o</em> Natiff</div><div class="food-qty">60 g</div><button class="swap-btn" onclick="openSwap(event,23)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,23)">deshacer</span></div>
 <div class="food-item" id="fi-24" data-group="dot-prot" data-original="Jamón bajo en grasa o pechuga de pollo o pavo + 30 g queso" data-original-qty="60 + 30 g"><div class="food-dot dot-prot"></div><div class="food-text">Jamón bajo en grasa <em>o</em> pechuga de pollo <em>o</em> pavo + 30 g queso</div><div class="food-qty">60 + 30 g</div><button class="swap-btn" onclick="openSwap(event,24)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,24)">deshacer</span></div>
 <div class="food-item" id="fi-25" data-group="dot-beb" data-original="Limonada natural o café en leche de almendras" data-original-qty="libre"><div class="food-dot dot-beb"></div><div class="food-text">Limonada natural <em>o</em> café en leche de almendras</div><div class="food-qty">libre</div><button class="swap-btn" onclick="openSwap(event,25)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,25)">deshacer</span></div>
+<div class="supp-block"><div class="supp-label">💊 DESPUÉS DEL DESAYUNO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="1-crea" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Creatina monohidrato</strong> · 5 g en medio vaso de agua</span></button>
+</div>
 <div class="tag-row"><span class="tag" style="background:#FFE0EF;color:#B0004F">🌾 Carbohidrato</span><span class="tag" style="background:#E3D6F7;color:#4B2F85">🥚 Proteína</span></div>
 </div>
 </div>
@@ -704,9 +738,13 @@ Volver
 <div class="meal-header" onclick="toggleMeal(this)">
 <div class="meal-icon icon-almuerzo">🍗</div>
 <div class="meal-meta"><div class="meal-name">Almuerzo</div><div class="meal-tag">1 Azúcar · Proteína · Grasa · Vegetales · Bebida libre</div></div>
+<span class="supp-count" data-total="1">💊 0/1</span>
 <div class="meal-arrow">▾</div>
 </div>
 <div class="meal-body">
+<div class="supp-block"><div class="supp-label">💊 ANTES DEL ALMUERZO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="1-ins2" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Insulean</strong> · 1 cápsula</span></button>
+</div>
 <div class="food-item" id="fi-29" data-group="dot-carb" data-original="Plátano maduro" data-original-qty="50 g"><div class="food-dot dot-carb"></div><div class="food-text">Plátano maduro</div><div class="food-qty">50 g</div><button class="swap-btn" onclick="openSwap(event,29)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,29)">deshacer</span></div>
 <div class="food-item" id="fi-30" data-group="dot-prot" data-original="Pechuga de pollo o corvina" data-original-qty="120 g"><div class="food-dot dot-prot"></div><div class="food-text">Pechuga de pollo <em>o</em> corvina</div><div class="food-qty">120 g</div><button class="swap-btn" onclick="openSwap(event,30)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,30)">deshacer</span></div>
 <div class="food-item" id="fi-31" data-group="dot-veg" data-original="Ensalada de vegetales" data-original-qty="libre"><div class="food-dot dot-veg"></div><div class="food-text">Ensalada de vegetales</div><div class="food-qty">libre</div><button class="swap-btn" onclick="openSwap(event,31)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,31)">deshacer</span></div>
@@ -777,13 +815,21 @@ Volver
 <div class="meal-header" onclick="toggleMeal(this)">
 <div class="meal-icon icon-desayuno">🍳</div>
 <div class="meal-meta"><div class="meal-name">Desayuno</div><div class="meal-tag">1 Azúcar · Proteína · Grasa · Bebida libre</div></div>
+<span class="supp-count" data-total="3">💊 0/3</span>
 <div class="meal-arrow">▾</div>
 </div>
 <div class="meal-body">
+<div class="supp-block"><div class="supp-label">💊 ANTES DEL DESAYUNO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="2-ins1" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Insulean</strong> · 1 cápsula</span></button>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="2-fib" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Fibra AveeFib</strong> · 5 g (1 cdita) disuelta en 1 vaso de agua + 1 vaso de agua adicional<small class="supp-note">Puedes tomarla también la noche anterior, antes de dormir.</small></span></button>
+</div>
 <div class="food-item" id="fi-48" data-group="dot-carb" data-original="Arepa de arroz (La Mary) o Sary extradelgada" data-original-qty="1 und"><div class="food-dot dot-carb"></div><div class="food-text">Arepa de arroz (La Mary) <em>o</em> Sary extradelgada</div><div class="food-qty">1 und</div><button class="swap-btn" onclick="openSwap(event,48)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,48)">deshacer</span></div>
 <div class="food-item" id="fi-49" data-group="dot-prot" data-original="2 huevos enteros + 40 g queso" data-original-qty="2 + 40 g"><div class="food-dot dot-prot"></div><div class="food-text">2 huevos enteros + 40 g queso</div><div class="food-qty">2 + 40 g</div><button class="swap-btn" onclick="openSwap(event,49)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,49)">deshacer</span></div>
 <div class="food-item" id="fi-50" data-group="dot-grasa" data-original="Aceite en aerosol" data-original-qty="mínimo"><div class="food-dot dot-grasa"></div><div class="food-text">Aceite en aerosol</div><div class="food-qty">mínimo</div><button class="swap-btn" onclick="openSwap(event,50)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,50)">deshacer</span></div>
 <div class="food-item" id="fi-51" data-group="dot-beb" data-original="Aromática o café negro o cocoa en leche de almendras" data-original-qty="libre"><div class="food-dot dot-beb"></div><div class="food-text">Aromática <em>o</em> café negro <em>o</em> cocoa en leche de almendras</div><div class="food-qty">libre</div><button class="swap-btn" onclick="openSwap(event,51)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,51)">deshacer</span></div>
+<div class="supp-block"><div class="supp-label">💊 DESPUÉS DEL DESAYUNO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="2-crea" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Creatina monohidrato</strong> · 5 g en medio vaso de agua</span></button>
+</div>
 <div class="tag-row"><span class="tag" style="background:#FFE0EF;color:#B0004F">🌾 Carbohidrato</span><span class="tag" style="background:#E3D6F7;color:#4B2F85">🥚 Proteína</span></div>
 </div>
 </div>
@@ -803,9 +849,13 @@ Volver
 <div class="meal-header" onclick="toggleMeal(this)">
 <div class="meal-icon icon-almuerzo">🥩</div>
 <div class="meal-meta"><div class="meal-name">Almuerzo</div><div class="meal-tag">1 Azúcar · Proteína · Grasa · Vegetales · Bebida libre</div></div>
+<span class="supp-count" data-total="1">💊 0/1</span>
 <div class="meal-arrow">▾</div>
 </div>
 <div class="meal-body">
+<div class="supp-block"><div class="supp-label">💊 ANTES DEL ALMUERZO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="2-ins2" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Insulean</strong> · 1 cápsula</span></button>
+</div>
 <div class="food-item" id="fi-55" data-group="dot-carb" data-original="Papas cocinadas o air fryer" data-original-qty="50 g"><div class="food-dot dot-carb"></div><div class="food-text">Papas cocinadas <em>o</em> air fryer</div><div class="food-qty">50 g</div><button class="swap-btn" onclick="openSwap(event,55)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,55)">deshacer</span></div>
 <div class="food-item" id="fi-56" data-group="dot-prot" data-original="Solomo o corvina" data-original-qty="120 g"><div class="food-dot dot-prot"></div><div class="food-text">Solomo <em>o</em> corvina</div><div class="food-qty">120 g</div><button class="swap-btn" onclick="openSwap(event,56)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,56)">deshacer</span></div>
 <div class="food-item" id="fi-57" data-group="dot-veg" data-original="Ensalada de vegetales" data-original-qty="libre"><div class="food-dot dot-veg"></div><div class="food-text">Ensalada de vegetales</div><div class="food-qty">libre</div><button class="swap-btn" onclick="openSwap(event,57)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,57)">deshacer</span></div>
@@ -877,13 +927,21 @@ Volver
 <div class="meal-header" onclick="toggleMeal(this)">
 <div class="meal-icon icon-desayuno">🥣</div>
 <div class="meal-meta"><div class="meal-name">Desayuno</div><div class="meal-tag">1 Azúcar · Proteína · Grasa · Bebida libre</div></div>
+<span class="supp-count" data-total="3">💊 0/3</span>
 <div class="meal-arrow">▾</div>
 </div>
 <div class="meal-body">
+<div class="supp-block"><div class="supp-label">💊 ANTES DEL DESAYUNO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="3-ins1" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Insulean</strong> · 1 cápsula</span></button>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="3-fib" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Fibra AveeFib</strong> · 5 g (1 cdita) disuelta en 1 vaso de agua + 1 vaso de agua adicional<small class="supp-note">Puedes tomarla también la noche anterior, antes de dormir.</small></span></button>
+</div>
 <div class="food-item" id="fi-76" data-group="dot-carb" data-original="Cereal sin azúcar o quinua pops o copos de avena Sin Remordimiento" data-original-qty="40 g"><div class="food-dot dot-carb"></div><div class="food-text">Cereal sin azúcar <em>o</em> quinua pops <em>o</em> copos de avena Sin Remordimiento</div><div class="food-qty">40 g</div><button class="swap-btn" onclick="openSwap(event,76)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,76)">deshacer</span></div>
 <div class="food-item" id="fi-77" data-group="dot-beb" data-original="Leche de almendras" data-original-qty="1 taza"><div class="food-dot dot-beb"></div><div class="food-text">Leche de almendras</div><div class="food-qty">1 taza</div><button class="swap-btn" onclick="openSwap(event,77)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,77)">deshacer</span></div>
 <div class="food-item" id="fi-78" data-group="dot-prot" data-original="Yogurt griego" data-original-qty="60 g"><div class="food-dot dot-prot"></div><div class="food-text">Yogurt griego</div><div class="food-qty">60 g</div><button class="swap-btn" onclick="openSwap(event,78)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,78)">deshacer</span></div>
 <div class="food-item" id="fi-79" data-group="dot-prot" data-original="Proteína en polvo" data-original-qty="10 g"><div class="food-dot dot-prot"></div><div class="food-text">Proteína en polvo</div><div class="food-qty">10 g</div><button class="swap-btn" onclick="openSwap(event,79)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,79)">deshacer</span></div>
+<div class="supp-block"><div class="supp-label">💊 DESPUÉS DEL DESAYUNO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="3-crea" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Creatina monohidrato</strong> · 5 g en medio vaso de agua</span></button>
+</div>
 <div class="tag-row"><span class="tag" style="background:#FFE0EF;color:#B0004F">🌾 Carbohidrato</span><span class="tag" style="background:#E3D6F7;color:#4B2F85">🥚 Proteína</span></div>
 </div>
 </div>
@@ -903,9 +961,13 @@ Volver
 <div class="meal-header" onclick="toggleMeal(this)">
 <div class="meal-icon icon-almuerzo">🥩</div>
 <div class="meal-meta"><div class="meal-name">Almuerzo</div><div class="meal-tag">1 Azúcar · Proteína · Grasa · Vegetales · Bebida libre</div></div>
+<span class="supp-count" data-total="1">💊 0/1</span>
 <div class="meal-arrow">▾</div>
 </div>
 <div class="meal-body">
+<div class="supp-block"><div class="supp-label">💊 ANTES DEL ALMUERZO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="3-ins2" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Insulean</strong> · 1 cápsula</span></button>
+</div>
 <div class="food-item" id="fi-83" data-group="dot-carb" data-original="Plátano maduro" data-original-qty="50 g"><div class="food-dot dot-carb"></div><div class="food-text">Plátano maduro</div><div class="food-qty">50 g</div><button class="swap-btn" onclick="openSwap(event,83)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,83)">deshacer</span></div>
 <div class="food-item" id="fi-84" data-group="dot-prot" data-original="Cañón (lomo de cerdo magro) o pollo" data-original-qty="120 g"><div class="food-dot dot-prot"></div><div class="food-text">Cañón (lomo de cerdo magro) <em>o</em> pollo</div><div class="food-qty">120 g</div><button class="swap-btn" onclick="openSwap(event,84)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,84)">deshacer</span></div>
 <div class="food-item" id="fi-85" data-group="dot-veg" data-original="Ensalada de vegetales" data-original-qty="libre"><div class="food-dot dot-veg"></div><div class="food-text">Ensalada de vegetales</div><div class="food-qty">libre</div><button class="swap-btn" onclick="openSwap(event,85)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,85)">deshacer</span></div>
@@ -975,13 +1037,21 @@ Volver
 <div class="meal-header" onclick="toggleMeal(this)">
 <div class="meal-icon icon-desayuno">🍞</div>
 <div class="meal-meta"><div class="meal-name">Desayuno</div><div class="meal-tag">1 Azúcar · Proteína · Grasa · Bebida libre</div></div>
+<span class="supp-count" data-total="3">💊 0/3</span>
 <div class="meal-arrow">▾</div>
 </div>
 <div class="meal-body">
+<div class="supp-block"><div class="supp-label">💊 ANTES DEL DESAYUNO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="4-ins1" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Insulean</strong> · 1 cápsula</span></button>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="4-fib" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Fibra AveeFib</strong> · 5 g (1 cdita) disuelta en 1 vaso de agua + 1 vaso de agua adicional<small class="supp-note">Puedes tomarla también la noche anterior, antes de dormir.</small></span></button>
+</div>
 <div class="food-item" id="fi-102" data-group="dot-carb" data-original="Pan de arroz" data-original-qty="60 g"><div class="food-dot dot-carb"></div><div class="food-text">Pan de arroz</div><div class="food-qty">60 g</div><button class="swap-btn" onclick="openSwap(event,102)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,102)">deshacer</span></div>
 <div class="food-item" id="fi-103" data-group="dot-prot" data-original="2 huevos enteros + 30 g queso" data-original-qty="2 + 30 g"><div class="food-dot dot-prot"></div><div class="food-text">2 huevos enteros + 30 g queso</div><div class="food-qty">2 + 30 g</div><button class="swap-btn" onclick="openSwap(event,103)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,103)">deshacer</span></div>
 <div class="food-item" id="fi-104" data-group="dot-grasa" data-original="Aceite en aerosol" data-original-qty="mínimo"><div class="food-dot dot-grasa"></div><div class="food-text">Aceite en aerosol</div><div class="food-qty">mínimo</div><button class="swap-btn" onclick="openSwap(event,104)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,104)">deshacer</span></div>
 <div class="food-item" id="fi-105" data-group="dot-beb" data-original="Café en leche de almendras" data-original-qty="30 cal"><div class="food-dot dot-beb"></div><div class="food-text">Café en leche de almendras</div><div class="food-qty">30 cal</div><button class="swap-btn" onclick="openSwap(event,105)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,105)">deshacer</span></div>
+<div class="supp-block"><div class="supp-label">💊 DESPUÉS DEL DESAYUNO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="4-crea" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Creatina monohidrato</strong> · 5 g en medio vaso de agua</span></button>
+</div>
 <div class="tag-row"><span class="tag" style="background:#FFE0EF;color:#B0004F">🌾 Carbohidrato</span><span class="tag" style="background:#E3D6F7;color:#4B2F85">🥚 Proteína</span></div>
 </div>
 </div>
@@ -1001,9 +1071,13 @@ Volver
 <div class="meal-header" onclick="toggleMeal(this)">
 <div class="meal-icon icon-almuerzo">🥩</div>
 <div class="meal-meta"><div class="meal-name">Almuerzo</div><div class="meal-tag">1 Azúcar · Proteína · Grasa · Vegetales · Bebida libre</div></div>
+<span class="supp-count" data-total="1">💊 0/1</span>
 <div class="meal-arrow">▾</div>
 </div>
 <div class="meal-body">
+<div class="supp-block"><div class="supp-label">💊 ANTES DEL ALMUERZO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="4-ins2" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Insulean</strong> · 1 cápsula</span></button>
+</div>
 <div class="food-item" id="fi-109" data-group="dot-carb" data-original="Arroz blanco" data-original-qty="50 g"><div class="food-dot dot-carb"></div><div class="food-text">Arroz blanco</div><div class="food-qty">50 g</div><button class="swap-btn" onclick="openSwap(event,109)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,109)">deshacer</span></div>
 <div class="food-item" id="fi-110" data-group="dot-prot" data-original="Carne de res magra o carne de cerdo magra" data-original-qty="120 g"><div class="food-dot dot-prot"></div><div class="food-text">Carne de res magra <em>o</em> carne de cerdo magra</div><div class="food-qty">120 g</div><button class="swap-btn" onclick="openSwap(event,110)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,110)">deshacer</span></div>
 <div class="food-item" id="fi-111" data-group="dot-veg" data-original="Ensalada de vegetales" data-original-qty="libre"><div class="food-dot dot-veg"></div><div class="food-text">Ensalada de vegetales</div><div class="food-qty">libre</div><button class="swap-btn" onclick="openSwap(event,111)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,111)">deshacer</span></div>
@@ -1071,12 +1145,20 @@ Volver
 <div class="meal-header" onclick="toggleMeal(this)">
 <div class="meal-icon icon-desayuno">🥞</div>
 <div class="meal-meta"><div class="meal-name">Desayuno — Pancake de avena</div><div class="meal-tag">1 Azúcar · Proteína · Grasa · Bebida libre</div></div>
+<span class="supp-count" data-total="3">💊 0/3</span>
 <div class="meal-arrow">▾</div>
 </div>
 <div class="meal-body">
+<div class="supp-block"><div class="supp-label">💊 ANTES DEL DESAYUNO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="5-ins1" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Insulean</strong> · 1 cápsula</span></button>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="5-fib" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Fibra AveeFib</strong> · 5 g (1 cdita) disuelta en 1 vaso de agua + 1 vaso de agua adicional<small class="supp-note">Puedes tomarla también la noche anterior, antes de dormir.</small></span></button>
+</div>
 <div class="food-item" id="fi-127" data-group="dot-carb" data-original="Avena en leche de almendras (30 cal)" data-original-qty="40 g"><div class="food-dot dot-carb"></div><div class="food-text">Avena en leche de almendras (30 cal)</div><div class="food-qty">40 g</div><button class="swap-btn" onclick="openSwap(event,127)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,127)">deshacer</span></div>
 <div class="food-item" id="fi-128" data-group="dot-prot" data-original="1 huevo entero + 2 claras (60 cc) + 40 g yogurt griego" data-original-qty="1 + 2 + 40 g"><div class="food-dot dot-prot"></div><div class="food-text">1 huevo entero + 2 claras (60 cc) + 40 g yogurt griego</div><div class="food-qty">1 + 2 + 40 g</div><button class="swap-btn" onclick="openSwap(event,128)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,128)">deshacer</span></div>
 <div class="food-item" id="fi-129" data-group="dot-beb" data-original="Cocoa en leche de almendras" data-original-qty="libre"><div class="food-dot dot-beb"></div><div class="food-text">Cocoa en leche de almendras</div><div class="food-qty">libre</div><button class="swap-btn" onclick="openSwap(event,129)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,129)">deshacer</span></div>
+<div class="supp-block"><div class="supp-label">💊 DESPUÉS DEL DESAYUNO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="5-crea" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Creatina monohidrato</strong> · 5 g en medio vaso de agua</span></button>
+</div>
 <div class="tag-row"><span class="tag" style="background:#FFE0EF;color:#B0004F">🌾 Carbohidrato</span><span class="tag" style="background:#E3D6F7;color:#4B2F85">🥚 Proteína</span></div>
 </div>
 </div>
@@ -1096,9 +1178,13 @@ Volver
 <div class="meal-header" onclick="toggleMeal(this)">
 <div class="meal-icon icon-almuerzo">🍗</div>
 <div class="meal-meta"><div class="meal-name">Almuerzo</div><div class="meal-tag">1 Azúcar · Proteína · Grasa · Vegetales · Bebida libre</div></div>
+<span class="supp-count" data-total="1">💊 0/1</span>
 <div class="meal-arrow">▾</div>
 </div>
 <div class="meal-body">
+<div class="supp-block"><div class="supp-label">💊 ANTES DEL ALMUERZO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="5-ins2" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Insulean</strong> · 1 cápsula</span></button>
+</div>
 <div class="food-item" id="fi-133" data-group="dot-carb" data-original="Papas cocinadas o air fryer" data-original-qty="60 g"><div class="food-dot dot-carb"></div><div class="food-text">Papas cocinadas <em>o</em> air fryer</div><div class="food-qty">60 g</div><button class="swap-btn" onclick="openSwap(event,133)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,133)">deshacer</span></div>
 <div class="food-item" id="fi-134" data-group="dot-prot" data-original="Pechuga de pollo" data-original-qty="120 g"><div class="food-dot dot-prot"></div><div class="food-text">Pechuga de pollo</div><div class="food-qty">120 g</div><button class="swap-btn" onclick="openSwap(event,134)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,134)">deshacer</span></div>
 <div class="food-item" id="fi-135" data-group="dot-veg" data-original="Ensalada de vegetales" data-original-qty="libre"><div class="food-dot dot-veg"></div><div class="food-text">Ensalada de vegetales</div><div class="food-qty">libre</div><button class="swap-btn" onclick="openSwap(event,135)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,135)">deshacer</span></div>
@@ -1167,13 +1253,21 @@ Volver
 <div class="meal-header" onclick="toggleMeal(this)">
 <div class="meal-icon icon-desayuno">🍳</div>
 <div class="meal-meta"><div class="meal-name">Desayuno</div><div class="meal-tag">1 Azúcar · Proteína · Grasa · Bebida libre</div></div>
+<span class="supp-count" data-total="3">💊 0/3</span>
 <div class="meal-arrow">▾</div>
 </div>
 <div class="meal-body">
+<div class="supp-block"><div class="supp-label">💊 ANTES DEL DESAYUNO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="6-ins1" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Insulean</strong> · 1 cápsula</span></button>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="6-fib" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Fibra AveeFib</strong> · 5 g (1 cdita) disuelta en 1 vaso de agua + 1 vaso de agua adicional<small class="supp-note">Puedes tomarla también la noche anterior, antes de dormir.</small></span></button>
+</div>
 <div class="food-item" id="fi-151" data-group="dot-carb" data-original="Arepa de arroz (La Mary) o Sary extradelgada" data-original-qty="1 und"><div class="food-dot dot-carb"></div><div class="food-text">Arepa de arroz (La Mary) <em>o</em> Sary extradelgada</div><div class="food-qty">1 und</div><button class="swap-btn" onclick="openSwap(event,151)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,151)">deshacer</span></div>
 <div class="food-item" id="fi-152" data-group="dot-prot" data-original="2 huevos enteros" data-original-qty="2 und"><div class="food-dot dot-prot"></div><div class="food-text">2 huevos enteros</div><div class="food-qty">2 und</div><button class="swap-btn" onclick="openSwap(event,152)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,152)">deshacer</span></div>
 <div class="food-item" id="fi-153" data-group="dot-grasa" data-original="Aceite en aerosol" data-original-qty="mínimo"><div class="food-dot dot-grasa"></div><div class="food-text">Aceite en aerosol</div><div class="food-qty">mínimo</div><button class="swap-btn" onclick="openSwap(event,153)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,153)">deshacer</span></div>
 <div class="food-item" id="fi-154" data-group="dot-beb" data-original="Aromática o café negro o cocoa en leche de almendras" data-original-qty="libre"><div class="food-dot dot-beb"></div><div class="food-text">Aromática <em>o</em> café negro <em>o</em> cocoa en leche de almendras</div><div class="food-qty">libre</div><button class="swap-btn" onclick="openSwap(event,154)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,154)">deshacer</span></div>
+<div class="supp-block"><div class="supp-label">💊 DESPUÉS DEL DESAYUNO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="6-crea" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Creatina monohidrato</strong> · 5 g en medio vaso de agua</span></button>
+</div>
 <div class="tag-row"><span class="tag" style="background:#FFE0EF;color:#B0004F">🌾 Carbohidrato</span><span class="tag" style="background:#E3D6F7;color:#4B2F85">🥚 Proteína</span></div>
 </div>
 </div>
@@ -1193,9 +1287,13 @@ Volver
 <div class="meal-header" onclick="toggleMeal(this)">
 <div class="meal-icon icon-almuerzo">🐟</div>
 <div class="meal-meta"><div class="meal-name">Almuerzo</div><div class="meal-tag">1 Azúcar · Proteína · Grasa · Vegetales · Bebida libre</div></div>
+<span class="supp-count" data-total="1">💊 0/1</span>
 <div class="meal-arrow">▾</div>
 </div>
 <div class="meal-body">
+<div class="supp-block"><div class="supp-label">💊 ANTES DEL ALMUERZO</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="6-ins2" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Insulean</strong> · 1 cápsula</span></button>
+</div>
 <div class="food-item" id="fi-158" data-group="dot-carb" data-original="Arroz blanco" data-original-qty="50 g"><div class="food-dot dot-carb"></div><div class="food-text">Arroz blanco</div><div class="food-qty">50 g</div><button class="swap-btn" onclick="openSwap(event,158)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,158)">deshacer</span></div>
 <div class="food-item" id="fi-159" data-group="dot-prot" data-original="Tilapia o corvina" data-original-qty="120 g"><div class="food-dot dot-prot"></div><div class="food-text">Tilapia <em>o</em> corvina</div><div class="food-qty">120 g</div><button class="swap-btn" onclick="openSwap(event,159)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,159)">deshacer</span></div>
 <div class="food-item" id="fi-160" data-group="dot-veg" data-original="Ensalada de vegetales" data-original-qty="libre"><div class="food-dot dot-veg"></div><div class="food-text">Ensalada de vegetales</div><div class="food-qty">libre</div><button class="swap-btn" onclick="openSwap(event,160)" title="Sustituir por otro alimento del mismo grupo" aria-label="Sustituir alimento"><span class="swap-icon">⇄</span><span class="swap-label">Cambiar</span></button><span class="swap-undo" onclick="undoSwap(event,160)">deshacer</span></div>
@@ -1550,6 +1648,46 @@ Volver
   } catch (err) {}
 
 })();
+
+// ─── Complementos: casillas por día, se reinician cada semana ───
+(function () {
+  var KEY = 'supl_mipre';
+  function weekId() {
+    var d = new Date(); d.setHours(0,0,0,0);
+    d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+  }
+  function load() {
+    try {
+      var o = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (o && o.w === weekId() && o.c) return o;
+    } catch (e) {}
+    return { w: weekId(), c: {} };
+  }
+  function save(o) { try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {} }
+  function refreshCounts() {
+    document.querySelectorAll('.meal-card').forEach(function (card) {
+      var b = card.querySelector('.supp-count');
+      if (!b) return;
+      var total = card.querySelectorAll('.supp-item').length;
+      var done = card.querySelectorAll('.supp-item.checked').length;
+      b.textContent = '💊 ' + done + '/' + total;
+      b.classList.toggle('complete', done === total);
+    });
+  }
+  window.toggleSupp = function (el) {
+    var o = load(), k = el.getAttribute('data-key');
+    var on = el.classList.toggle('checked');
+    el.setAttribute('aria-checked', on ? 'true' : 'false');
+    if (on) o.c[k] = 1; else delete o.c[k];
+    save(o); refreshCounts();
+  };
+  var o = load(); save(o);
+  document.querySelectorAll('.supp-item').forEach(function (el) {
+    if (o.c[el.getAttribute('data-key')]) { el.classList.add('checked'); el.setAttribute('aria-checked','true'); }
+  });
+  refreshCounts();
+})();
 </script>
 </body>
-                                                                                                                                                                                                                                                                                                                                                                                                              </html>
+                                                                                                                   </html>
