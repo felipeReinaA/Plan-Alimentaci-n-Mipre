@@ -350,6 +350,35 @@ transition: transform 0.15s, box-shadow 0.2s;
 /* ─── Aviso después de entrenar ─── */
 .after-tip { background: rgba(181,140,255,0.08); border: 1px solid rgba(181,140,255,0.25); border-radius: 14px; padding: 10px 12px; font-size: 12px; color: var(--text2); display: flex; gap: 8px; margin-bottom: 7px; line-height: 1.45; }
 .after-tip strong { color: var(--text); }
+
+/* ─── Complementos y esquema ─── */
+.supp-block { margin: 0 0 10px; padding: 10px 12px; background: rgba(181,140,255,0.08); border: 1.5px dashed rgba(181,140,255,0.4); border-radius: 14px; }
+.supp-label { display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 800; color: var(--purple); letter-spacing: .04em; margin-bottom: 4px; }
+.supp-count { font-size: 11px; font-weight: 800; background: rgba(181,140,255,0.15); color: var(--purple); padding: 2px 9px; border-radius: 10px; letter-spacing: 0; }
+.supp-count.complete { background: #D6006B; color: #fff; }
+.supp-info { font-size: 12.5px; color: var(--text2); padding: 4px 0 6px; line-height: 1.45; }
+.supp-item { display: flex; align-items: flex-start; gap: 10px; width: 100%; padding: 7px 0; background: none; border: none; font-family: inherit; text-align: left; cursor: pointer; font-size: 13.5px; color: var(--text2); line-height: 1.4; }
+.supp-item strong { color: var(--text); }
+.supp-item:focus-visible, .tl-head:focus-visible { outline: 3px solid #D6006B; outline-offset: 2px; border-radius: 8px; }
+.supp-box { width: 22px; height: 22px; border-radius: 7px; border: 2px solid #6B58A0; background: transparent; flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: all .15s; }
+.supp-box svg { opacity: 0; transition: opacity .15s; }
+.supp-item.checked .supp-box { background: #D6006B; border-color: #D6006B; }
+.supp-item.checked .supp-box svg { opacity: 1; }
+.supp-item.checked .supp-text { opacity: .5; }
+
+.tl-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 12px; overflow: hidden; }
+.tl-head { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 13px 14px; background: none; border: none; font-family: inherit; font-size: 13.5px; font-weight: 800; color: var(--text); text-align: left; cursor: pointer; }
+.tl-arrow { color: var(--text3); transition: transform .25s; }
+.tl-card.open .tl-arrow { transform: rotate(180deg); color: #FF5CAB; }
+.tl-body { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+.tl-card.open .tl-body { max-height: 520px; }
+.tl-line { margin: 2px 16px 16px 22px; padding-left: 20px; border-left: 2px solid var(--purple-dark); }
+.tl-step { position: relative; padding: 0 0 14px; }
+.tl-step:last-child { padding-bottom: 0; }
+.tl-dot { position: absolute; left: -27px; top: 4px; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--card); }
+.tl-title { font-size: 14px; font-weight: 800; color: var(--text); }
+.tl-sub { font-size: 12.5px; color: var(--text2); margin-top: 1px; }
+@media (prefers-reduced-motion: reduce) { .tl-body, .tl-arrow, .supp-box { transition: none; } }
 </style>
 </head>
 <body>
@@ -412,6 +441,19 @@ Volver
 
 <main class="main">
 
+<section class="tl-card" id="tlCard">
+<button type="button" class="tl-head" aria-expanded="false" onclick="toggleTl(this)"><span>⏱️ Cómo organizar tu comida alrededor del entreno</span><span class="tl-arrow">▾</span></button>
+<div class="tl-body"><div class="tl-line">
+<div class="tl-step"><div class="tl-dot" style="background:#B58CFF"></div><div class="tl-txt"><div class="tl-title">🍽️ Tu comida</div><div class="tl-sub">Haz tu tiempo de comida normal.</div></div></div>
+<div class="tl-step"><div class="tl-dot" style="background:#B58CFF"></div><div class="tl-txt"><div class="tl-title">⏳ Espera ½ hora</div><div class="tl-sub">Después de comer.</div></div></div>
+<div class="tl-step"><div class="tl-dot" style="background:#D6006B"></div><div class="tl-txt"><div class="tl-title">💧 15 min antes: agua</div><div class="tl-sub">Toma agua.</div></div></div>
+<div class="tl-step"><div class="tl-dot" style="background:#B58CFF"></div><div class="tl-txt"><div class="tl-title">🏋️ Entrenamiento</div><div class="tl-sub">Toma agua mientras entrenas.</div></div></div>
+<div class="tl-step"><div class="tl-dot" style="background:#D6006B"></div><div class="tl-txt"><div class="tl-title">💧 Después: solo agua</div><div class="tl-sub">20 a 30 min (máximo 1 hora).</div></div></div>
+<div class="tl-step"><div class="tl-dot" style="background:#B58CFF"></div><div class="tl-txt"><div class="tl-title">🍽️ Tu siguiente comida</div><div class="tl-sub">En tren inferior: 1 copa de proteína + 50 g de fruta.</div></div></div>
+</div></div>
+</section>
+
+
 <div class="day-panel active" id="day-0">
 <div class="day-hero" style="background:linear-gradient(135deg,rgba(214,0,107,0.10),rgba(214,0,107,0.03));border-color:rgba(214,0,107,0.35);">
 <div class="day-hero-icon">🍑</div>
@@ -431,6 +473,9 @@ Volver
 <div class="prog-wrap">
 <div class="prog-top"><span class="prog-title">Progreso del día</span><span class="prog-pct" id="pct-0">0%</span></div>
 <div class="prog-bar"><div class="prog-fill" id="bar-0"></div></div>
+</div>
+<div class="supp-block"><div class="supp-label"><span>💊 ANTES DE ENTRENAR</span><span class="supp-count">💊 0/1</span></div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="d0-ber" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Berberina</strong> · 500 mg, 1 al día antes de entrenar</span></button>
 </div>
 <div class="sec-label">Pantorrilla y glúteo</div>
 <div class="ex-card">
@@ -498,7 +543,10 @@ Volver
 <div><div class="cardio-title">Cardio Final — Intenso</div><div class="cardio-detail">Trote a velocidad mínima de 6 (intervalos de 4×1)<br>o escaleras, sin apoyar los brazos</div></div>
 <div class="cardio-timer"><div class="cardio-min">30</div><div class="cardio-lbl">minutos</div></div>
 </div>
-<div class="after-tip"><span>💧</span><span><strong>Después de entrenar:</strong> solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida con 1 copa de proteína + 50 g de fruta.</span></div>
+<div class="supp-block"><div class="supp-label"><span>💊 DESPUÉS DE ENTRENAR</span><span class="supp-count">💊 0/1</span></div>
+<div class="supp-info">💧 Solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida.</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="d0-prot" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Proteína (Protizyme de Metabolic o Isolate de Basic)</strong> · 1 copa + 50 g de fruta, sobre la siguiente comida (no apenas termines de entrenar)</span></button>
+</div>
 </div>
 
 <div class="day-panel" id="day-1">
@@ -520,6 +568,9 @@ Volver
 <div class="prog-wrap">
 <div class="prog-top"><span class="prog-title">Progreso del día</span><span class="prog-pct" id="pct-1">0%</span></div>
 <div class="prog-bar"><div class="prog-fill" id="bar-1"></div></div>
+</div>
+<div class="supp-block"><div class="supp-label"><span>💊 ANTES DE ENTRENAR</span><span class="supp-count">💊 0/1</span></div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="d1-ber" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Berberina</strong> · 500 mg, 1 al día antes de entrenar</span></button>
 </div>
 <div class="sec-label">Espalda</div>
 <div class="tri-card open">
@@ -623,7 +674,9 @@ Volver
 <div><div class="cardio-title">Cardio Final — Intenso</div><div class="cardio-detail">Trote a velocidad mínima de 6 (intervalos de 4×1)<br>o escaleras, sin apoyar los brazos</div></div>
 <div class="cardio-timer"><div class="cardio-min">30</div><div class="cardio-lbl">minutos</div></div>
 </div>
-<div class="after-tip"><span>💧</span><span><strong>Después de entrenar:</strong> solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida del plan.</span></div>
+<div class="supp-block"><div class="supp-label"><span>💧 DESPUÉS DE ENTRENAR</span></div>
+<div class="supp-info">Solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida del plan.</div>
+</div>
 </div>
 
 <div class="day-panel" id="day-2">
@@ -645,6 +698,9 @@ Volver
 <div class="prog-wrap">
 <div class="prog-top"><span class="prog-title">Progreso del día</span><span class="prog-pct" id="pct-2">0%</span></div>
 <div class="prog-bar"><div class="prog-fill" id="bar-2"></div></div>
+</div>
+<div class="supp-block"><div class="supp-label"><span>💊 ANTES DE ENTRENAR</span><span class="supp-count">💊 0/1</span></div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="d2-ber" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Berberina</strong> · 500 mg, 1 al día antes de entrenar</span></button>
 </div>
 <div class="sec-label">Pantorrilla y glúteo</div>
 <div class="ex-card">
@@ -712,7 +768,10 @@ Volver
 <div><div class="cardio-title">Cardio Final — Intenso</div><div class="cardio-detail">Trote a velocidad mínima de 6 (intervalos de 4×1)<br>o escaleras, sin apoyar los brazos</div></div>
 <div class="cardio-timer"><div class="cardio-min">30</div><div class="cardio-lbl">minutos</div></div>
 </div>
-<div class="after-tip"><span>💧</span><span><strong>Después de entrenar:</strong> solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida con 1 copa de proteína + 50 g de fruta.</span></div>
+<div class="supp-block"><div class="supp-label"><span>💊 DESPUÉS DE ENTRENAR</span><span class="supp-count">💊 0/1</span></div>
+<div class="supp-info">💧 Solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida.</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="d2-prot" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Proteína (Protizyme de Metabolic o Isolate de Basic)</strong> · 1 copa + 50 g de fruta, sobre la siguiente comida (no apenas termines de entrenar)</span></button>
+</div>
 </div>
 
 <div class="day-panel" id="day-3">
@@ -734,6 +793,9 @@ Volver
 <div class="prog-wrap">
 <div class="prog-top"><span class="prog-title">Progreso del día</span><span class="prog-pct" id="pct-3">0%</span></div>
 <div class="prog-bar"><div class="prog-fill" id="bar-3"></div></div>
+</div>
+<div class="supp-block"><div class="supp-label"><span>💊 ANTES DE ENTRENAR</span><span class="supp-count">💊 0/1</span></div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="d3-ber" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Berberina</strong> · 500 mg, 1 al día antes de entrenar</span></button>
 </div>
 <div class="sec-label">Espalda</div>
 <div class="tri-card open">
@@ -837,7 +899,9 @@ Volver
 <div><div class="cardio-title">Cardio Final — Intenso</div><div class="cardio-detail">Trote a velocidad mínima de 6 (intervalos de 4×1)<br>o escaleras, sin apoyar los brazos</div></div>
 <div class="cardio-timer"><div class="cardio-min">30</div><div class="cardio-lbl">minutos</div></div>
 </div>
-<div class="after-tip"><span>💧</span><span><strong>Después de entrenar:</strong> solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida del plan.</span></div>
+<div class="supp-block"><div class="supp-label"><span>💧 DESPUÉS DE ENTRENAR</span></div>
+<div class="supp-info">Solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida del plan.</div>
+</div>
 </div>
 
 <div class="day-panel" id="day-4">
@@ -859,6 +923,9 @@ Volver
 <div class="prog-wrap">
 <div class="prog-top"><span class="prog-title">Progreso del día</span><span class="prog-pct" id="pct-4">0%</span></div>
 <div class="prog-bar"><div class="prog-fill" id="bar-4"></div></div>
+</div>
+<div class="supp-block"><div class="supp-label"><span>💊 ANTES DE ENTRENAR</span><span class="supp-count">💊 0/1</span></div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="d4-ber" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Berberina</strong> · 500 mg, 1 al día antes de entrenar</span></button>
 </div>
 <div class="sec-label">Pantorrilla y glúteo</div>
 <div class="ex-card">
@@ -926,7 +993,10 @@ Volver
 <div><div class="cardio-title">Cardio Final — Intenso</div><div class="cardio-detail">Trote a velocidad mínima de 6 (intervalos de 4×1)<br>o escaleras, sin apoyar los brazos</div></div>
 <div class="cardio-timer"><div class="cardio-min">30</div><div class="cardio-lbl">minutos</div></div>
 </div>
-<div class="after-tip"><span>💧</span><span><strong>Después de entrenar:</strong> solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida con 1 copa de proteína + 50 g de fruta.</span></div>
+<div class="supp-block"><div class="supp-label"><span>💊 DESPUÉS DE ENTRENAR</span><span class="supp-count">💊 0/1</span></div>
+<div class="supp-info">💧 Solo agua durante 20 a 30 min (máx. 1 hora). Luego, tu siguiente comida.</div>
+<button type="button" class="supp-item" role="checkbox" aria-checked="false" data-key="d4-prot" onclick="toggleSupp(this)"><span class="supp-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="supp-text"><strong>Proteína (Protizyme de Metabolic o Isolate de Basic)</strong> · 1 copa + 50 g de fruta, sobre la siguiente comida (no apenas termines de entrenar)</span></button>
+</div>
 </div>
 
 </main>
@@ -1113,6 +1183,53 @@ next.scrollIntoView({behavior:'smooth', block:'center'});
 function updateFab(idx) {
 document.getElementById('fabBtn').style.display = 'flex';
 }
+
+// ─── Esquema de tiempos ───
+function toggleTl(btn) {
+  var card = document.getElementById('tlCard');
+  var open = card.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+// ─── Complementos: casillas por día, se reinician cada semana (no cuentan en la barra de progreso) ───
+(function () {
+  var KEY = 'supl_rutina_mipre';
+  function weekId() {
+    var d = new Date(); d.setHours(0,0,0,0);
+    d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+  }
+  function load() {
+    try {
+      var o = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (o && o.w === weekId() && o.c) return o;
+    } catch (e) {}
+    return { w: weekId(), c: {} };
+  }
+  function save(o) { try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {} }
+  function refreshCounts() {
+    document.querySelectorAll('.supp-block').forEach(function (b) {
+      var c = b.querySelector('.supp-count');
+      if (!c) return;
+      var total = b.querySelectorAll('.supp-item').length;
+      var done = b.querySelectorAll('.supp-item.checked').length;
+      c.textContent = '💊 ' + done + '/' + total;
+      c.classList.toggle('complete', done === total);
+    });
+  }
+  window.toggleSupp = function (el) {
+    var o = load(), k = el.getAttribute('data-key');
+    var on = el.classList.toggle('checked');
+    el.setAttribute('aria-checked', on ? 'true' : 'false');
+    if (on) o.c[k] = 1; else delete o.c[k];
+    save(o); refreshCounts();
+  };
+  var o = load(); save(o);
+  document.querySelectorAll('.supp-item').forEach(function (el) {
+    if (o.c[el.getAttribute('data-key')]) { el.classList.add('checked'); el.setAttribute('aria-checked','true'); }
+  });
+  refreshCounts();
+})();
 </script>
 </body>
 </html>
